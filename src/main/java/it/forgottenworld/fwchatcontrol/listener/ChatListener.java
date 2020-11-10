@@ -48,7 +48,8 @@ public class ChatListener implements Listener {
                 playerMessagesCount.put(playerUUID, 1);
             }
         }
-        String message = event.getMessage();
+        String[] fullMessage = event.getMessage().split(":");
+        String message = fullMessage[1];
         float upperChars = 0;
         for(char c : message.toCharArray()){
             if(String.valueOf(c).matches("[A-Z]")){
@@ -60,26 +61,6 @@ public class ChatListener implements Listener {
             message = message.toLowerCase();
         }
         message = message.substring(0, 1).toUpperCase() + message.substring(1);
-        event.setMessage(message);
-    }
-
-    @EventHandler
-    public void onPlayerChat(AsyncChatHookEvent event){
-        String message = event.getMessage();
-        System.out.println(event.getChannel().getName());
-        if(event.getChannel().getName().equalsIgnoreCase("g")){
-            int upperChars = 0;
-            for(char c : message.toCharArray()){
-                if(String.valueOf(c).matches("[A-Z]")){
-                    upperChars++;
-                }
-            }
-            System.out.println((upperChars / message.length()) * 100);
-            if((upperChars / message.length()) * 100 > maxCapPercentage){
-                message = message.toLowerCase();
-            }
-        }
-        message = message.substring(0, 1).toUpperCase() + message.substring(1);
-        event.setMessage(message);
+        event.setMessage(String.join(fullMessage[0],message));
     }
 }
