@@ -52,7 +52,7 @@ public class ChatListener implements Listener {
         String message = fullMessage[1];
         float upperChars = 0;
         for(char c : message.toCharArray()){
-            if(String.valueOf(c).matches("[A-Z]")){
+            if((int)c >= (int)'A' && (int)c<=(int)'Z'){
                 upperChars++;
             }
         }
