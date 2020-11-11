@@ -29,7 +29,16 @@ public class ChatListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerChat(AsyncPlayerChatEvent event){
+        floodCheck(event);
+        if(event.isCancelled()) return;
+        String message = capsCheck(event.getMessage());
+        message = capitalizeFirstLetter(message);
+        event.setMessage(message);
+    }
+
+    private void floodCheck(AsyncPlayerChatEvent event){
         int newSeconds = LocalDateTime.now().getSecond();
+        System.out.println(event.getMessage());
         if(newSeconds != seconds){
             playerMessagesCount.clear();
             seconds = newSeconds;
@@ -40,7 +49,6 @@ public class ChatListener implements Listener {
                 if(messagesCount > maxMessagesPerSecond){
                     event.setCancelled(true);
                     event.getPlayer().sendMessage(ChatColor.RED + "Stop flooding the chat!");
-                    return;
                 }else{
                     playerMessagesCount.put(playerUUID, messagesCount+1);
                 }
@@ -48,19 +56,22 @@ public class ChatListener implements Listener {
                 playerMessagesCount.put(playerUUID, 1);
             }
         }
-        String[] fullMessage = event.getMessage().split(":");
-        String message = fullMessage[1];
+    }
+
+    private String capsCheck(String message){
         float upperChars = 0;
         for(char c : message.toCharArray()){
             if((int)c >= (int)'A' && (int)c<=(int)'Z'){
                 upperChars++;
             }
         }
-        System.out.println((upperChars / message.length()) * 100);
         if((upperChars / message.length()) * 100 > maxCapPercentage){
             message = message.toLowerCase();
         }
-        message = message.substring(0, 1).toUpperCase() + message.substring(1);
-        event.setMessage(String.join(fullMessage[0],message));
+        return message;
+    }
+
+    private String capitalizeFirstLetter(String message){
+        return message.substring(0, 1).toUpperCase() + message.substring(1);
     }
 }
