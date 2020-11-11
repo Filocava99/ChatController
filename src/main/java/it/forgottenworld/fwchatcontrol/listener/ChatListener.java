@@ -36,7 +36,6 @@ public class ChatListener implements Listener {
 
     private void floodCheck(AsyncPlayerChatEvent event){
         int newSeconds = LocalDateTime.now().getSecond();
-        System.out.println(event.getMessage());
         if(newSeconds != seconds){
             playerMessagesCount.clear();
             seconds = newSeconds;
