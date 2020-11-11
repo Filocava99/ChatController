@@ -1,4 +1,4 @@
 maxMessagesPerSecond: 8
 maxCapsCharPercentage: 40
 bannedWords:
-  - "[stronzo]"
+  - "[s][t][r][o][n][z][o]"
