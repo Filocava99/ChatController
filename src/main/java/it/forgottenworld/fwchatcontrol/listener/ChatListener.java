@@ -1,6 +1,5 @@
 package it.forgottenworld.fwchatcontrol.listener;
 
-import com.palmergames.bukkit.TownyChat.events.AsyncChatHookEvent;
 import it.forgottenworld.fwchatcontrol.FWChatControl;
 import it.forgottenworld.fwchatcontrol.config.Config;
 import org.bukkit.ChatColor;
@@ -11,7 +10,6 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ChatListener implements Listener {
