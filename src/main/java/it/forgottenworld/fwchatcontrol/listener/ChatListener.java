@@ -10,16 +10,15 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ChatListener implements Listener {
 
     private final int maxCapPercentage;
     private final int maxMessagesPerSecond;
-    private final List<String> regexes;
+    private final List<Pattern> regexes = new ArrayList<>();
     private final Map<UUID, Integer> playerMessagesCount = new HashMap<>();
     private int seconds = 0;
 
@@ -27,7 +26,7 @@ public class ChatListener implements Listener {
         Config config = plugin.getPluginConfig();
         maxMessagesPerSecond = config.getConfig().getInt("maxMessagesPerSecond");
         maxCapPercentage = config.getConfig().getInt("maxCapsCharPercentage");
-        regexes = config.getConfig().getStringList("bannedWords");
+        config.getConfig().getStringList("bannedWords").forEach(regex -> regexes.add(Pattern.compile(regex, Pattern.CASE_INSENSITIVE)));
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -73,8 +72,8 @@ public class ChatListener implements Listener {
 
     private String removeBannedWords(String message){
         final String replacementCharacters = "*****";
-        for(String regex : regexes){
-            message = message.replaceAll(regex, replacementCharacters);
+        for(Pattern regex : regexes){
+            message = regex.matcher(message).replaceAll(replacementCharacters);
         }
         return message;
     }
