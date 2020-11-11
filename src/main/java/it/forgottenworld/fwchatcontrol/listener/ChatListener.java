@@ -31,9 +31,7 @@ public class ChatListener implements Listener {
     public void onPlayerChat(AsyncPlayerChatEvent event){
         floodCheck(event);
         if(event.isCancelled()) return;
-        String message = capsCheck(event.getMessage());
-        message = capitalizeFirstLetter(message);
-        event.setMessage(message);
+        event.setMessage(capitalizeFirstLetter(capsCheck(event.getMessage())));
     }
 
     private void floodCheck(AsyncPlayerChatEvent event){
