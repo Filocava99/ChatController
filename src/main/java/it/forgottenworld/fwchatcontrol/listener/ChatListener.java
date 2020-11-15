@@ -41,7 +41,7 @@ public class ChatListener implements Listener {
             if(settings.isWarnIfCapsing())warnController.warnPlayer(event.getPlayer());
             message = message.toLowerCase();
         }
-        event.setMessage(removeBannedWords(capitalizeFirstLetter(message)));
+        event.setMessage(capitalizeFirstLetter(removeBannedWords(message)));
     }
 
     private void floodCheck(AsyncPlayerChatEvent event) {

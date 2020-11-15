@@ -5,3 +5,10 @@ api-version: 1.16
 depend:
   - TownyChat
   - Essentials
+commands:
+  fwcc:
+    aliases:
+      - fwchatcontrol
+      - chatcontrol
+      - cc
+    description: Admin command of FWChatControl
