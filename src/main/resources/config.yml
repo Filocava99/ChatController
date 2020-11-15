@@ -1,4 +1,18 @@
+############################
+#                          #
+#      FWChatControl       #
+#      by Tigierrei        #
+#                          #
+############################
+
+#SETTINGS
 maxMessagesPerSecond: 8
+warnIfFlooding: false
 maxCapsCharPercentage: 40
+warnIfCapsing: false
+warnIfUsingBannedWords: true
+#Max warns before muting the player. 0 if you don't want to mute him
+maxWarnsBeforeMute: 3
+muteDurationInSeconds: 32400
 bannedWords:
   - "[s][t][r][o][n][z][o]"

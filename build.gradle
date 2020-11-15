@@ -3,7 +3,7 @@ import org.apache.tools.ant.filters.ReplaceTokens
 apply plugin: 'java'
 
 group = 'it.forgottenworld'
-version = '0.2.2'
+version = '0.3.0'
 
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
@@ -19,12 +19,15 @@ repositories {
         name = 'sonatype'
         url = 'https://oss.sonatype.org/content/groups/public/'
     }
+    maven {
+        url "https://ci.ender.zone/plugin/repository/everything/"
+    }
 }
 
 dependencies {
     compileOnly 'com.destroystokyo.paper:paper-api:1.16.3-R0.1-SNAPSHOT'
     implementation 'com.github.TownyAdvanced:TownyChat:0.82'
-    implementation 'com.github.TownyAdvanced:Towny:0.96.3.2'
+    compileOnly 'net.ess3:EssentialsX:2.16.1'
 }
 
 processResources {
