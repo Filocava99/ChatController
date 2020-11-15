@@ -18,8 +18,8 @@ public final class FWChatControl extends JavaPlugin {
     @Override
     public void onEnable() {
         loadConfig();
-        registerListeners();
         warnController = new WarnController(this);
+        registerListeners();
     }
 
     public Settings getSettings() {
@@ -34,12 +34,12 @@ public final class FWChatControl extends JavaPlugin {
         return essentials;
     }
 
-    private void loadConfig(){
+    private void loadConfig() {
         try {
             Config config = new Config("config.yml", this);
             loadData(config);
             hookEssentials();
-        }catch (Exception e){
+        } catch (Exception e) {
             Bukkit.getLogger().log(Level.SEVERE, "Error loading or creating the plugin config. Disabling " + getName() + ".");
             getServer().getPluginManager().disablePlugin(this);
         }
@@ -58,14 +58,15 @@ public final class FWChatControl extends JavaPlugin {
         config.getConfig().getStringList("bannedWords").forEach(regex -> settings.getRegexes().add(Pattern.compile(regex, Pattern.CASE_INSENSITIVE)));
     }
 
-    private void registerListeners(){
+    private void registerListeners() {
         getServer().getPluginManager().registerEvents(new ChatListener(this), this);
     }
 
-    private void hookEssentials(){
+    private void hookEssentials() {
         try {
             essentials = getPlugin(Essentials.class);
-        }catch (Exception e){
+            getLogger().log(Level.INFO, "Hooked into Essentials");
+        } catch (Exception e) {
             getLogger().log(Level.SEVERE, "Error while hooking into Essentials. Disabling FWChatControl...");
             getPluginLoader().disablePlugin(this);
         }

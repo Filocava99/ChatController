@@ -4,3 +4,4 @@ main: it.forgottenworld.fwchatcontrol.FWChatControl
 api-version: 1.16
 depend:
   - TownyChat
+  - Essentials
