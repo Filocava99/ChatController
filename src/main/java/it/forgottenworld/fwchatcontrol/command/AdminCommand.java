@@ -55,6 +55,7 @@ public class AdminCommand implements CommandExecutor {
 
     private void printHelp(CommandSender sender){
         sender.sendMessage(ChatColor.GREEN + "/fww reload");
+        sender.sendMessage(ChatColor.GREEN + "/fww warn <player>");
         sender.sendMessage(ChatColor.GREEN + "/fww setCaps <percentage>");
         sender.sendMessage(ChatColor.GREEN + "/fwcc word ban <word>");
         sender.sendMessage(ChatColor.GREEN + "/fwcc word list <page>");
