@@ -39,7 +39,7 @@ public class AdminCommand implements CommandExecutor {
                 printHelp(sender);
             }
         }else if(args[1].equalsIgnoreCase("setCaps")){
-
+            setCapsPercentage(sender, args);
         }else if(args[1].equalsIgnoreCase("reload")){
             reload(sender);
         }else{
@@ -49,6 +49,8 @@ public class AdminCommand implements CommandExecutor {
     }
 
     private void printHelp(CommandSender sender){
+        sender.sendMessage(ChatColor.GREEN + "/fww reload");
+        sender.sendMessage(ChatColor.GREEN + "/fww setCaps <percentage>");
         sender.sendMessage(ChatColor.GREEN + "/fwcc word ban <word>");
         sender.sendMessage(ChatColor.GREEN + "/fwcc word list <page>");
         sender.sendMessage(ChatColor.GREEN + "/fwcc word unban <word>");
