@@ -45,6 +45,8 @@ public class AdminCommand implements CommandExecutor {
             setCapsPercentage(sender, args);
         }else if(args[1].equalsIgnoreCase("reload")){
             reload(sender);
+        }else if(args[1].equalsIgnoreCase("warn")){
+            warnPlayer(sender, args);
         }else{
             printHelp(sender);
         }
