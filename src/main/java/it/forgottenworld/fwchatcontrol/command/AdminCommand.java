@@ -52,6 +52,8 @@ public class AdminCommand implements CommandExecutor {
             resetWarn(sender, args);
         }else if(args[1].equalsIgnoreCase("punish")){
             forcePunishment(sender, args);
+        }else if(args[1].equalsIgnoreCase("ranking")){
+            playerWarnsRanking(sender);
         }else if(args[1].equalsIgnoreCase("capitalize")){
             toggleFirstLetterCapitalization(sender);
         }else{
@@ -85,6 +87,14 @@ public class AdminCommand implements CommandExecutor {
             plugin.getSettings().getRegexes().add(Pattern.compile(stringBuilder.toString()));
             plugin.saveConfig();
         }
+    }
+
+    private void playerWarnsRanking(CommandSender sender){
+        ComponentBuilder componentBuilder = new ComponentBuilder();
+        plugin.getWarnController().getPlayerWarnsCount().entrySet().stream().limit(10).forEach(uuidIntegerEntry -> {
+            componentBuilder.append(ChatColor.GREEN + Bukkit.getPlayer(uuidIntegerEntry.getKey()).getName() + " " + uuidIntegerEntry.getValue() + " warn points");
+        });
+        sender.spigot().sendMessage(componentBuilder.create());
     }
 
     private void forcePunishment(CommandSender sender, String[] args){
