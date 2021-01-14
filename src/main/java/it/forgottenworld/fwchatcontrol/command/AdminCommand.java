@@ -38,8 +38,10 @@ public class AdminCommand implements CommandExecutor {
             }else{
                 printHelp(sender);
             }
+        }else if(args[1].equalsIgnoreCase("setCaps")){
+
         }else if(args[1].equalsIgnoreCase("reload")){
-            reload();
+            reload(sender);
         }else{
             printHelp(sender);
         }
@@ -66,7 +68,17 @@ public class AdminCommand implements CommandExecutor {
         }
     }
 
-    private void reload(){
+    private void setCapsPercentage(CommandSender sender, String[] args){
+        if(args.length < 3){
+            sender.sendMessage(ChatColor.RED + "You must specify the new caps percentage!");
+        }else{
+            plugin.getSettings().setMaxCapsCharPercentage(Integer.parseInt(args[2]));
+            sender.sendMessage(ChatColor.GREEN + "Caps percentage updated!");
+        }
+    }
+
+    private void reload(CommandSender sender){
+        sender.sendMessage(ChatColor.GREEN + "Config reloaded!");
         plugin.reloadConfig();
     }
 
