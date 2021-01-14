@@ -50,6 +50,8 @@ public class AdminCommand implements CommandExecutor {
            removeWarn(sender, args);
         }else if(args[1].equalsIgnoreCase("reset")){
             resetWarn(sender, args);
+        }else if(args[1].equalsIgnoreCase("capitalize")){
+            toggleFirstLetterCapitalization(sender);
         }else{
             printHelp(sender);
         }
@@ -79,6 +81,12 @@ public class AdminCommand implements CommandExecutor {
             plugin.getSettings().getRegexes().add(Pattern.compile(stringBuilder.toString()));
             plugin.saveConfig();
         }
+    }
+
+    private void toggleFirstLetterCapitalization(CommandSender sender){
+        plugin.getSettings().setCapitalizeFirstLetter(!plugin.getSettings().isCapitalizeFirstLetter());
+        sender.sendMessage(ChatColor.GREEN + "First letter capitalization now set to " + ChatColor.BOLD + plugin.getSettings().isCapitalizeFirstLetter());
+        plugin.saveConfig();
     }
 
     private void removeWarn(CommandSender sender, String[] args){
@@ -126,6 +134,7 @@ public class AdminCommand implements CommandExecutor {
         }else{
             plugin.getSettings().setMaxCapsCharPercentage(Integer.parseInt(args[2]));
             sender.sendMessage(ChatColor.GREEN + "Caps percentage updated!");
+            plugin.saveConfig();
         }
     }
 
@@ -169,6 +178,7 @@ public class AdminCommand implements CommandExecutor {
         }else{
             plugin.getSettings().getRegexes().removeIf(pattern -> pattern.pattern().equalsIgnoreCase(args[2]));
             sender.sendMessage(ChatColor.GREEN + "Regex " + ChatColor.DARK_GREEN + args[2] + ChatColor.GREEN + " deleted.");
+            plugin.saveConfig();
         }
     }
 
