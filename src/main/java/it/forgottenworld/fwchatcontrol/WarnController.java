@@ -2,6 +2,8 @@ package it.forgottenworld.fwchatcontrol;
 
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
+import it.forgottenworld.fwchatcontrol.punishment.Punishment;
+import it.forgottenworld.fwchatcontrol.punishment.PunishmentType;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -36,11 +38,8 @@ public class WarnController {
         int warns;
         if (playerWarnsCount.containsKey(playerUUID)) {
             warns = playerWarnsCount.get(playerUUID) + 1;
-            if (warns >= settings.getMaxWarnsBeforeMute()) {
-                player.sendMessage(ChatColor.RED + "You have been temporarily muted for reaching the max number of warn points!");
-                String muteReason = "Reached max warn points";
-                mutePlayer(player, muteReason, settings.getMuteDurationInSeconds());
-                warns = 0;
+            if (settings.getPunishments().containsKey(warns)) {
+                punishPlayer(player, warns);
             }
         } else {
             warns = 1;
@@ -53,12 +52,25 @@ public class WarnController {
         }
     }
 
-    public void mutePlayer(Player player, String reason, long durationInSeconds) {
-        int millis = 1000;
-        User user = essentials.getUser(player);
-        user.setMuted(true);
-        user.setMuteReason(reason);
-        user.setMuteTimeout(durationInSeconds * millis);
+    public void punishPlayer(Player player, int warns){
+        Punishment punishment = settings.getPunishments().get(warns);
+        if(punishment.getType() == PunishmentType.MUTE){
+            player.sendMessage(ChatColor.RED + "You have been temporarily muted for having reached " + warns + " warn points!");
+            //String muteReason = "Reached " + warns + " warn points";
+            mutePlayer(player, punishment.getDuration());
+        } else if (punishment.getType() == PunishmentType.KICK) {
+            player.kickPlayer("You have been kicked for having reached " + warns + " warn points!");
+        }else if(punishment.getType() == PunishmentType.BAN){
+            banPlayer(player, warns);
+        }
+    }
+
+    public void mutePlayer(Player player, long durationInSeconds) {
+        Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "mute " + player.getName() + " " + durationInSeconds + "s");
+    }
+
+    public void banPlayer(Player player, int durationInSeconds){
+        Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "tempban " + player.getName() + " " + durationInSeconds + "s");
     }
 
     public void saveWarns() {
