@@ -92,6 +92,7 @@ public class ChatListener implements Listener {
     }
 
     private String capitalizeFirstLetter(String message) {
-        return message.substring(0, 1).toUpperCase() + message.substring(1);
+        return settings.isCapitalizeFirstLetter() ? message.substring(0, 1).toUpperCase() + message.substring(1) : message;
+
     }
 }

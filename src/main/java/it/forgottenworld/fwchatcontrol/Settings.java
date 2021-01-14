@@ -13,6 +13,7 @@ public class Settings {
     private boolean warnIfUsingBannedWords = true;
     private int maxWarnsBeforeMute = 3;
     private long muteDurationInSeconds = 32400;
+    private boolean capitalizeFirstLetter = false;
 
     public List<Pattern> getRegexes() {
         return regexes;
@@ -76,5 +77,13 @@ public class Settings {
 
     public void setMuteDurationInSeconds(long muteDurationInSeconds) {
         this.muteDurationInSeconds = muteDurationInSeconds;
+    }
+
+    public boolean isCapitalizeFirstLetter() {
+        return capitalizeFirstLetter;
+    }
+
+    public void setCapitalizeFirstLetter(boolean capitalizeFirstLetter) {
+        this.capitalizeFirstLetter = capitalizeFirstLetter;
     }
 }

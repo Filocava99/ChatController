@@ -6,13 +6,28 @@
 ############################
 
 #SETTINGS
+#Max messages that a player can send every second. High values could allow players to flood the chat
 maxMessagesPerSecond: 8
+#Warn if the player is flooding. Flooding means sending more messages per seconds than the allowed ones
 warnIfFlooding: false
+#Percentage threshold after the which the message will be lower cased
 maxCapsCharPercentage: 40
 warnIfCapsing: false
+#TRUE = the player will receive a warn point if he uses a banned word
 warnIfUsingBannedWords: true
-#Max warns before muting the player. 0 if you don't want to mute him
-maxWarnsBeforeMute: 3
-muteDurationInSeconds: 32400
+#TRUE = the first letter of every message will be capitalized
+capitalizeFirstLetter: false
 bannedWords:
   - "[s][t][r][o][n][z][o]"
+#Avabilable punishments types: KICK, MUTE, BAN
+#The duration is expressed in seconds (NOT milliseconds). Example: 1 hour = 3600 seconds
+punishments:
+  3:
+    type: KICK
+    duration: 0
+  4:
+    type: MUTE
+    duration: 3600
+  5:
+    type: BAN
+    duration: 3600
