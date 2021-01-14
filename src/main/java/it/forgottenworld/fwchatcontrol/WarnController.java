@@ -33,6 +33,10 @@ public class WarnController {
         return playerWarnsCount;
     }
 
+    public void resetWarn(OfflinePlayer player){
+        playerWarnsCount.remove(player.getUniqueId());
+    }
+
     public void warnPlayer(OfflinePlayer player) {
         UUID playerUUID = player.getUniqueId();
         int warns;

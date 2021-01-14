@@ -10,7 +10,6 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -47,6 +46,8 @@ public class AdminCommand implements CommandExecutor {
             reload(sender);
         }else if(args[1].equalsIgnoreCase("warn")){
             warnPlayer(sender, args);
+        }else if(args[1].equalsIgnoreCase("reset")){
+            resetWarn(sender, args);
         }else{
             printHelp(sender);
         }
@@ -56,6 +57,7 @@ public class AdminCommand implements CommandExecutor {
     private void printHelp(CommandSender sender){
         sender.sendMessage(ChatColor.GREEN + "/fww reload");
         sender.sendMessage(ChatColor.GREEN + "/fww warn <player>");
+        sender.sendMessage(ChatColor.GREEN + "/fww reset <player>");
         sender.sendMessage(ChatColor.GREEN + "/fww setCaps <percentage>");
         sender.sendMessage(ChatColor.GREEN + "/fwcc word ban <word>");
         sender.sendMessage(ChatColor.GREEN + "/fwcc word list <page>");
@@ -73,6 +75,19 @@ public class AdminCommand implements CommandExecutor {
             }
             plugin.getSettings().getRegexes().add(Pattern.compile(stringBuilder.toString()));
             plugin.saveConfig();
+        }
+    }
+
+    private void resetWarn(CommandSender sender, String[] args){
+        if(args.length < 3){
+            sender.sendMessage(ChatColor.RED + "You must specify a player!");
+        }else{
+            OfflinePlayer player = Bukkit.getPlayer(args[2]);
+            if(player != null){
+                plugin.getWarnController().resetWarn(player);
+            }else{
+                sender.sendMessage(ChatColor.RED + "That player does not exists!");
+            }
         }
     }
 
