@@ -114,6 +114,6 @@ public final class FWChatControl extends JavaPlugin {
             punishmentSection.set("punishment", punishment.getType());
             punishmentSection.set("duration", punishment.getDuration());
         });
-        configuration.set("bannedWords", settings.getRegexes().stream().map(regex -> regex.pattern()));
+        configuration.set("bannedWords", settings.getRegexes().stream().map(regex -> regex.pattern()).toArray(String[]::new));
     }
 }

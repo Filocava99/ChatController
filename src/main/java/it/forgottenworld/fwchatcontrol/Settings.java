@@ -1,7 +1,6 @@
 package it.forgottenworld.fwchatcontrol;
 
 import it.forgottenworld.fwchatcontrol.punishment.Punishment;
-import it.forgottenworld.fwchatcontrol.punishment.PunishmentType;
 
 import java.util.*;
 import java.util.regex.Pattern;
