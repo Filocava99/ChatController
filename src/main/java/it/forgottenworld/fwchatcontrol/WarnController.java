@@ -37,6 +37,15 @@ public class WarnController {
         playerWarnsCount.remove(player.getUniqueId());
     }
 
+    public void removeWarn(OfflinePlayer player){
+        UUID playerUUID = player.getUniqueId();
+        if (playerWarnsCount.containsKey(playerUUID)) {
+            int warns = playerWarnsCount.get(playerUUID) - 1;
+            playerWarnsCount.put(playerUUID, warns);
+            saveWarns();
+        }
+    }
+
     public void warnPlayer(OfflinePlayer player) {
         UUID playerUUID = player.getUniqueId();
         int warns;

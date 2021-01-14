@@ -46,6 +46,8 @@ public class AdminCommand implements CommandExecutor {
             reload(sender);
         }else if(args[1].equalsIgnoreCase("warn")){
             warnPlayer(sender, args);
+        }else if(args[1].equalsIgnoreCase("removeWarn")){
+           removeWarn(sender, args);
         }else if(args[1].equalsIgnoreCase("reset")){
             resetWarn(sender, args);
         }else{
@@ -57,6 +59,7 @@ public class AdminCommand implements CommandExecutor {
     private void printHelp(CommandSender sender){
         sender.sendMessage(ChatColor.GREEN + "/fww reload");
         sender.sendMessage(ChatColor.GREEN + "/fww warn <player>");
+        sender.sendMessage(ChatColor.GREEN + "/fww removeWarn <player>");
         sender.sendMessage(ChatColor.GREEN + "/fww reset <player>");
         sender.sendMessage(ChatColor.GREEN + "/fww setCaps <percentage>");
         sender.sendMessage(ChatColor.GREEN + "/fwcc word ban <word>");
@@ -75,6 +78,19 @@ public class AdminCommand implements CommandExecutor {
             }
             plugin.getSettings().getRegexes().add(Pattern.compile(stringBuilder.toString()));
             plugin.saveConfig();
+        }
+    }
+
+    private void removeWarn(CommandSender sender, String[] args){
+        if(args.length < 3){
+            sender.sendMessage(ChatColor.RED + "You must specify a player!");
+        }else{
+            OfflinePlayer player = Bukkit.getPlayer(args[2]);
+            if(player != null){
+                plugin.getWarnController().removeWarn(player);
+            }else{
+                sender.sendMessage(ChatColor.RED + "That player does not exists!");
+            }
         }
     }
 
