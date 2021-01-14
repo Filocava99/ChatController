@@ -1,5 +1,8 @@
 package it.forgottenworld.fwchatcontrol;
 
+import it.forgottenworld.fwchatcontrol.punishment.Punishment;
+import it.forgottenworld.fwchatcontrol.punishment.PunishmentType;
+
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -9,11 +12,10 @@ public class Settings {
     private int maxMessagesPerSecond = Integer.MAX_VALUE;
     private boolean warnIfFlooding = false;
     private int maxCapsCharPercentage = 0;
-    private boolean warnIfCapsing = false;
+    private boolean warnIfUsingCaps = false;
     private boolean warnIfUsingBannedWords = true;
-    private int maxWarnsBeforeMute = 3;
-    private long muteDurationInSeconds = 32400;
     private boolean capitalizeFirstLetter = false;
+    private final Map<Integer, Punishment> punishments = new HashMap<>();
 
     public List<Pattern> getRegexes() {
         return regexes;
@@ -47,12 +49,12 @@ public class Settings {
         this.warnIfFlooding = warnIfFlooding;
     }
 
-    public boolean isWarnIfCapsing() {
-        return warnIfCapsing;
+    public boolean isWarnIfUsingCaps() {
+        return warnIfUsingCaps;
     }
 
-    public void setWarnIfCapsing(boolean warnIfCapsing) {
-        this.warnIfCapsing = warnIfCapsing;
+    public void setWarnIfUsingCaps(boolean warnIfUsingCaps) {
+        this.warnIfUsingCaps = warnIfUsingCaps;
     }
 
     public boolean isWarnIfUsingBannedWords() {
@@ -63,27 +65,23 @@ public class Settings {
         this.warnIfUsingBannedWords = warnIfUsingBannedWords;
     }
 
-    public int getMaxWarnsBeforeMute() {
-        return maxWarnsBeforeMute;
-    }
-
-    public void setMaxWarnsBeforeMute(int maxWarnsBeforeMute) {
-        this.maxWarnsBeforeMute = maxWarnsBeforeMute;
-    }
-
-    public long getMuteDurationInSeconds() {
-        return muteDurationInSeconds;
-    }
-
-    public void setMuteDurationInSeconds(long muteDurationInSeconds) {
-        this.muteDurationInSeconds = muteDurationInSeconds;
-    }
-
     public boolean isCapitalizeFirstLetter() {
         return capitalizeFirstLetter;
     }
 
     public void setCapitalizeFirstLetter(boolean capitalizeFirstLetter) {
         this.capitalizeFirstLetter = capitalizeFirstLetter;
+    }
+
+    public Map<Integer, Punishment> getPunishments() {
+        return Collections.unmodifiableMap(punishments);
+    }
+
+    public void addPunishment(int warns, Punishment punishment){
+        punishments.put(warns, punishment);
+    }
+
+    public Punishment removePunishment(int warns){
+        return punishments.remove(warns);
     }
 }

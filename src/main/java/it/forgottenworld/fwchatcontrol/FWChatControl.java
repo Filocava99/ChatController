@@ -4,7 +4,10 @@ import com.earth2me.essentials.Essentials;
 import it.forgottenworld.fwchatcontrol.command.AdminCommand;
 import it.forgottenworld.fwchatcontrol.config.Config;
 import it.forgottenworld.fwchatcontrol.listener.ChatListener;
+import it.forgottenworld.fwchatcontrol.punishment.Punishment;
+import it.forgottenworld.fwchatcontrol.punishment.PunishmentType;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -62,13 +65,22 @@ public final class FWChatControl extends JavaPlugin {
         settings.setMaxMessagesPerSecond(config.getConfig().getInt("maxMessagesPerSecond"));
         settings.setWarnIfFlooding(config.getConfig().getBoolean("warnIfFlooding"));
         settings.setMaxCapsCharPercentage(config.getConfig().getInt("maxCapsCharPercentage"));
-        settings.setWarnIfCapsing(config.getConfig().getBoolean("warnIfCapsing"));
+        settings.setWarnIfUsingCaps(config.getConfig().getBoolean("warnIfCapsing"));
         settings.setWarnIfUsingBannedWords(config.getConfig().getBoolean("warnIfUsingBannedWords"));
+        loadPunishments(config);
         loadRegexes(config);
     }
 
     private void loadRegexes(Config config) {
         config.getConfig().getStringList("bannedWords").forEach(regex -> settings.getRegexes().add(Pattern.compile(regex, Pattern.CASE_INSENSITIVE)));
+    }
+
+    private void loadPunishments(Config config){
+        config.getConfig().getConfigurationSection("punishments").getKeys(false).forEach(warns -> {
+            ConfigurationSection punishmentSection = config.getConfig().getConfigurationSection("punishments."+warns);
+            Punishment punishment = new Punishment(PunishmentType.valueOf(punishmentSection.getString("punishment")),punishmentSection.getInt("duration"));
+            settings.addPunishment(Integer.parseInt(warns), punishment);
+        });
     }
 
     private void registerCommands(){
@@ -94,10 +106,14 @@ public final class FWChatControl extends JavaPlugin {
         configuration.set("maxMessagesPerSecond", settings.getMaxMessagesPerSecond());
         configuration.set("warnIfFlooding",settings.isWarnIfFlooding());
         configuration.set("maxCapsCharPercentage", settings.getMaxCapsCharPercentage());
-        configuration.set("warnIfCapsing", settings.isWarnIfCapsing());
+        configuration.set("warnIfCapsing", settings.isWarnIfUsingCaps());
         configuration.set("warnIfUsingBannedWords",settings.isWarnIfUsingBannedWords());
-        configuration.set("maxWarnsBeforeMute", settings.getMaxWarnsBeforeMute());
-        configuration.set("muteDurationInSeconds",settings.getMuteDurationInSeconds());
+        ConfigurationSection punishmentsSection = configuration.createSection("punishments");
+        settings.getPunishments().forEach((warns, punishment) -> {
+            ConfigurationSection punishmentSection = punishmentsSection.createSection(String.valueOf(warns));
+            punishmentSection.set("punishment", punishment.getType());
+            punishmentSection.set("duration", punishment.getDuration());
+        });
         configuration.set("bannedWords", settings.getRegexes().stream().map(regex -> regex.pattern()));
     }
 }

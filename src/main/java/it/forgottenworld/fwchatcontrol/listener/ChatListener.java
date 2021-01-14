@@ -38,7 +38,7 @@ public class ChatListener implements Listener {
         String message = event.getMessage();
         if (containsBannedWords(message)) warnController.warnPlayer(event.getPlayer());
         if(checkIfViolatingCapsRules(message)){
-            if(settings.isWarnIfCapsing())warnController.warnPlayer(event.getPlayer());
+            if(settings.isWarnIfUsingCaps())warnController.warnPlayer(event.getPlayer());
             message = message.toLowerCase();
         }
         event.setMessage(capitalizeFirstLetter(removeBannedWords(message)));
