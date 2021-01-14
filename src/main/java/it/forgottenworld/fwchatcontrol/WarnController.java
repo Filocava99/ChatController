@@ -1,7 +1,6 @@
 package it.forgottenworld.fwchatcontrol;
 
 import com.earth2me.essentials.Essentials;
-import com.earth2me.essentials.User;
 import it.forgottenworld.fwchatcontrol.punishment.Punishment;
 import it.forgottenworld.fwchatcontrol.punishment.PunishmentType;
 import org.bukkit.Bukkit;

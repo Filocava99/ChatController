@@ -38,6 +38,8 @@ public class AdminCommand implements CommandExecutor {
             }else{
                 printHelp(sender);
             }
+        }else if(args[1].equalsIgnoreCase("reload")){
+            reload();
         }else{
             printHelp(sender);
         }
@@ -62,6 +64,10 @@ public class AdminCommand implements CommandExecutor {
             plugin.getSettings().getRegexes().add(Pattern.compile(stringBuilder.toString()));
             plugin.saveConfig();
         }
+    }
+
+    private void reload(){
+        plugin.reloadConfig();
     }
 
     private void list(CommandSender sender, String[] args){
