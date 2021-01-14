@@ -4,10 +4,13 @@ import it.forgottenworld.fwchatcontrol.FWChatControl;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -67,6 +70,19 @@ public class AdminCommand implements CommandExecutor {
             }
             plugin.getSettings().getRegexes().add(Pattern.compile(stringBuilder.toString()));
             plugin.saveConfig();
+        }
+    }
+
+    private void warnPlayer(CommandSender sender, String[] args){
+        if(args.length < 3){
+            sender.sendMessage(ChatColor.RED + "You must specify a player!");
+        }else{
+            OfflinePlayer player = Bukkit.getPlayer(args[2]);
+            if(player != null){
+                plugin.getWarnController().warnPlayer(player);
+            }else{
+                sender.sendMessage(ChatColor.RED + "That player does not exists!");
+            }
         }
     }
 

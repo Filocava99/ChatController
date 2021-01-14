@@ -5,6 +5,7 @@ import it.forgottenworld.fwchatcontrol.punishment.Punishment;
 import it.forgottenworld.fwchatcontrol.punishment.PunishmentType;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import java.io.*;
@@ -32,7 +33,7 @@ public class WarnController {
         return playerWarnsCount;
     }
 
-    public void warnPlayer(Player player) {
+    public void warnPlayer(OfflinePlayer player) {
         UUID playerUUID = player.getUniqueId();
         int warns;
         if (playerWarnsCount.containsKey(playerUUID)) {
@@ -46,29 +47,39 @@ public class WarnController {
         playerWarnsCount.put(playerUUID, warns);
         saveWarns();
         if (warns != 0) {
-            player.sendMessage(ChatColor.RED + "You have been warned for using an illegal word!");
-            player.sendMessage(ChatColor.RED + "You have a total of " + ChatColor.DARK_RED + warns + ChatColor.RED + " warns.");
+            if(player.isOnline()){
+                Player onlinePlayer = Bukkit.getPlayer(playerUUID);
+                assert onlinePlayer != null;
+                onlinePlayer.sendMessage(ChatColor.RED + "You have been warned for using an illegal word!");
+                onlinePlayer.sendMessage(ChatColor.RED + "You have a total of " + ChatColor.DARK_RED + warns + ChatColor.RED + " warns.");
+            }
         }
     }
 
-    public void punishPlayer(Player player, int warns){
+    public void punishPlayer(OfflinePlayer player, int warns){
         Punishment punishment = settings.getPunishments().get(warns);
         if(punishment.getType() == PunishmentType.MUTE){
-            player.sendMessage(ChatColor.RED + "You have been temporarily muted for having reached " + warns + " warn points!");
+            if(player.isOnline()){
+                Player onlinePlayer = Bukkit.getPlayer(player.getUniqueId());
+                assert onlinePlayer != null;
+                onlinePlayer.sendMessage(ChatColor.RED + "You have been temporarily muted for having reached " + warns + " warn points!");
+            }
             //String muteReason = "Reached " + warns + " warn points";
             mutePlayer(player, punishment.getDuration());
         } else if (punishment.getType() == PunishmentType.KICK) {
-            player.kickPlayer("You have been kicked for having reached " + warns + " warn points!");
+            if(player.isOnline()){
+                Bukkit.getPlayer(player.getUniqueId()).kickPlayer("You have been kicked for having reached " + warns + " warn points!");
+            }
         }else if(punishment.getType() == PunishmentType.BAN){
             banPlayer(player, warns);
         }
     }
 
-    public void mutePlayer(Player player, long durationInSeconds) {
+    public void mutePlayer(OfflinePlayer player, long durationInSeconds) {
         Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "mute " + player.getName() + " " + durationInSeconds + "s");
     }
 
-    public void banPlayer(Player player, int durationInSeconds){
+    public void banPlayer(OfflinePlayer player, int durationInSeconds){
         Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "tempban " + player.getName() + " " + durationInSeconds + "s");
     }
 
