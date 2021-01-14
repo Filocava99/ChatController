@@ -50,6 +50,8 @@ public class AdminCommand implements CommandExecutor {
            removeWarn(sender, args);
         }else if(args[1].equalsIgnoreCase("reset")){
             resetWarn(sender, args);
+        }else if(args[1].equalsIgnoreCase("punish")){
+            forcePunishment(sender, args);
         }else if(args[1].equalsIgnoreCase("capitalize")){
             toggleFirstLetterCapitalization(sender);
         }else{
@@ -65,6 +67,7 @@ public class AdminCommand implements CommandExecutor {
         sender.sendMessage(ChatColor.GREEN + "/fww reset <player>");
         sender.sendMessage(ChatColor.GREEN + "/fww setCaps <percentage>");
         sender.sendMessage(ChatColor.GREEN + "/fww capitalize");
+        sender.sendMessage(ChatColor.GREEN + "/fww punish <player> <warnLevel>");
         sender.sendMessage(ChatColor.GREEN + "/fwcc word ban <word>");
         sender.sendMessage(ChatColor.GREEN + "/fwcc word list <page>");
         sender.sendMessage(ChatColor.GREEN + "/fwcc word unban <word>");
@@ -81,6 +84,21 @@ public class AdminCommand implements CommandExecutor {
             }
             plugin.getSettings().getRegexes().add(Pattern.compile(stringBuilder.toString()));
             plugin.saveConfig();
+        }
+    }
+
+    private void forcePunishment(CommandSender sender, String[] args){
+        if(args.length < 4){
+            sender.sendMessage(ChatColor.RED + "You must specify a player and a warn level!");
+        }else{
+            OfflinePlayer player = Bukkit.getPlayer(args[2]);
+            int warns = Integer.parseInt(args[3]);
+            if(player != null){
+                plugin.getWarnController().punishPlayer(player, warns);
+                sender.sendMessage(ChatColor.GREEN + player.getName() + " has been punished!");
+            }else{
+                sender.sendMessage(ChatColor.RED + "That player does not exists!");
+            }
         }
     }
 

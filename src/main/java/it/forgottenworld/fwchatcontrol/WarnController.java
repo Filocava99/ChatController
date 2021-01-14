@@ -88,11 +88,11 @@ public class WarnController {
         }
     }
 
-    public void mutePlayer(OfflinePlayer player, long durationInSeconds) {
+    private void mutePlayer(OfflinePlayer player, long durationInSeconds) {
         Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "mute " + player.getName() + " " + durationInSeconds + "s");
     }
 
-    public void banPlayer(OfflinePlayer player, int durationInSeconds){
+    private void banPlayer(OfflinePlayer player, int durationInSeconds){
         Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "tempban " + player.getName() + " " + durationInSeconds + "s");
     }
 
