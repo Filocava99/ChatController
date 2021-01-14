@@ -64,6 +64,7 @@ public class AdminCommand implements CommandExecutor {
         sender.sendMessage(ChatColor.GREEN + "/fww removeWarn <player>");
         sender.sendMessage(ChatColor.GREEN + "/fww reset <player>");
         sender.sendMessage(ChatColor.GREEN + "/fww setCaps <percentage>");
+        sender.sendMessage(ChatColor.GREEN + "/fww capitalize");
         sender.sendMessage(ChatColor.GREEN + "/fwcc word ban <word>");
         sender.sendMessage(ChatColor.GREEN + "/fwcc word list <page>");
         sender.sendMessage(ChatColor.GREEN + "/fwcc word unban <word>");
