@@ -1,5 +1,6 @@
 package it.forgottenworld.fwchatcontrol.command;
 
+import com.palmergames.bukkit.TownyChat.Chat;
 import it.forgottenworld.fwchatcontrol.FWChatControl;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -46,7 +47,7 @@ public class AdminCommand implements CommandExecutor {
             reload(sender);
         }else if(args[0].equalsIgnoreCase("warn")){
             warnPlayer(sender, args);
-        }else if(args[0].equalsIgnoreCase("removeWarn")){
+        }else if(args[0].equalsIgnoreCase("reduce")){
            removeWarn(sender, args);
         }else if(args[0].equalsIgnoreCase("reset")){
             resetWarn(sender, args);
@@ -63,14 +64,14 @@ public class AdminCommand implements CommandExecutor {
     }
 
     private void printHelp(CommandSender sender){
-        sender.sendMessage(ChatColor.GREEN + "/fww reload");
-        sender.sendMessage(ChatColor.GREEN + "/fww warn <player>");
-        sender.sendMessage(ChatColor.GREEN + "/fww removeWarn <player>");
-        sender.sendMessage(ChatColor.GREEN + "/fww reset <player>");
-        sender.sendMessage(ChatColor.GREEN + "/fww setCaps <percentage>");
-        sender.sendMessage(ChatColor.GREEN + "/fww capitalize");
-        sender.sendMessage(ChatColor.GREEN + "/fww ranking");
-        sender.sendMessage(ChatColor.GREEN + "/fww punish <player> <warnLevel>");
+        sender.sendMessage(ChatColor.GREEN + "/fwcc reload");
+        sender.sendMessage(ChatColor.GREEN + "/fwcc warn <player>");
+        sender.sendMessage(ChatColor.GREEN + "/fwcc reduce <player>");
+        sender.sendMessage(ChatColor.GREEN + "/fwcc reset <player>");
+        sender.sendMessage(ChatColor.GREEN + "/fwcc setCaps <percentage>");
+        sender.sendMessage(ChatColor.GREEN + "/fwcc capitalize");
+        sender.sendMessage(ChatColor.GREEN + "/fwcc ranking");
+        sender.sendMessage(ChatColor.GREEN + "/fwcc punish <player> <warnLevel>");
         sender.sendMessage(ChatColor.GREEN + "/fwcc word ban <word>");
         sender.sendMessage(ChatColor.GREEN + "/fwcc word list <page>");
         sender.sendMessage(ChatColor.GREEN + "/fwcc word unban <word>");
@@ -126,6 +127,7 @@ public class AdminCommand implements CommandExecutor {
             OfflinePlayer player = Bukkit.getPlayer(args[1]);
             if(player != null){
                 plugin.getWarnController().removeWarn(player);
+                sender.sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + player.getName() + ChatColor.RESET + "" + ChatColor.GREEN + " has been warned!");
             }else{
                 sender.sendMessage(ChatColor.RED + "That player does not exists!");
             }
@@ -139,6 +141,7 @@ public class AdminCommand implements CommandExecutor {
             OfflinePlayer player = Bukkit.getPlayer(args[1]);
             if(player != null){
                 plugin.getWarnController().resetWarn(player);
+                sender.sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + player.getName() + ChatColor.RESET + "" + ChatColor.GREEN + " warns have been reset!");
             }else{
                 sender.sendMessage(ChatColor.RED + "That player does not exists!");
             }
