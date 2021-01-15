@@ -40,7 +40,7 @@ public class WarnController {
     public void removeWarn(OfflinePlayer player){
         UUID playerUUID = player.getUniqueId();
         if (playerWarnsCount.containsKey(playerUUID)) {
-            int warns = playerWarnsCount.get(playerUUID) - 1;
+            int warns = Math.max(0, playerWarnsCount.get(playerUUID) - 1);
             playerWarnsCount.put(playerUUID, warns);
             saveWarns();
         }
@@ -48,25 +48,18 @@ public class WarnController {
 
     public void warnPlayer(OfflinePlayer player) {
         UUID playerUUID = player.getUniqueId();
-        int warns;
-        if (playerWarnsCount.containsKey(playerUUID)) {
-            warns = playerWarnsCount.get(playerUUID) + 1;
-            if (settings.getPunishments().containsKey(warns)) {
-                punishPlayer(player, warns);
-            }
-        } else {
-            warns = 1;
+        int warns = playerWarnsCount.containsKey(playerUUID) ? playerWarnsCount.get(playerUUID) + 1 : 1;
+        if (warns != 0 && player.isOnline()) {
+            Player onlinePlayer = Bukkit.getPlayer(playerUUID);
+            assert onlinePlayer != null;
+            onlinePlayer.sendMessage(ChatColor.RED + "You have been warned for using an illegal word!");
+            onlinePlayer.sendMessage(ChatColor.RED + "You have a total of " + ChatColor.DARK_RED + warns + ChatColor.RED + " warns.");
+        }
+        if (settings.getPunishments().containsKey(warns)) {
+            punishPlayer(player, warns);
         }
         playerWarnsCount.put(playerUUID, warns);
         saveWarns();
-        if (warns != 0) {
-            if(player.isOnline()){
-                Player onlinePlayer = Bukkit.getPlayer(playerUUID);
-                assert onlinePlayer != null;
-                onlinePlayer.sendMessage(ChatColor.RED + "You have been warned for using an illegal word!");
-                onlinePlayer.sendMessage(ChatColor.RED + "You have a total of " + ChatColor.DARK_RED + warns + ChatColor.RED + " warns.");
-            }
-        }
     }
 
     public void punishPlayer(OfflinePlayer player, int warns){
