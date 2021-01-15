@@ -50,6 +50,7 @@ public final class FWChatControl extends JavaPlugin {
         } catch (Exception e) {
             Bukkit.getLogger().log(Level.SEVERE, "Error loading or creating the plugin config. Disabling " + getName() + ".");
             getServer().getPluginManager().disablePlugin(this);
+            e.printStackTrace();
         }
     }
 
@@ -81,7 +82,7 @@ public final class FWChatControl extends JavaPlugin {
     private void loadPunishments(Config config){
         config.getConfig().getConfigurationSection("punishments").getKeys(false).forEach(warns -> {
             ConfigurationSection punishmentSection = config.getConfig().getConfigurationSection("punishments."+warns);
-            Punishment punishment = new Punishment(PunishmentType.valueOf(punishmentSection.getString("punishment")),punishmentSection.getInt("duration"));
+            Punishment punishment = new Punishment(PunishmentType.valueOf(punishmentSection.getString("type")),punishmentSection.getInt("duration"));
             settings.addPunishment(Integer.parseInt(warns), punishment);
         });
     }
