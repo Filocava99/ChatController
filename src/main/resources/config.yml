@@ -17,6 +17,8 @@ warnIfCapsing: false
 warnIfUsingBannedWords: true
 #TRUE = the first letter of every message will be capitalized
 capitalizeFirstLetter: false
+#After how many seconds the plugin should reduce by one the warn points of a player
+reduceWarnPeriod: 86400
 bannedWords:
   - "[s][t][r][o][n][z][o]"
 #Avabilable punishments types: KICK, MUTE, BAN

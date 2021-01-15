@@ -6,6 +6,7 @@ import it.forgottenworld.fwchatcontrol.config.Config;
 import it.forgottenworld.fwchatcontrol.listener.ChatListener;
 import it.forgottenworld.fwchatcontrol.punishment.Punishment;
 import it.forgottenworld.fwchatcontrol.punishment.PunishmentType;
+import it.forgottenworld.fwchatcontrol.task.ReduceWarnTask;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -23,9 +24,10 @@ public final class FWChatControl extends JavaPlugin {
     @Override
     public void onEnable() {
         loadConfig();
-        warnController = new WarnController(this);
+        instantiateControllers();
         registerCommands();
         registerListeners();
+        registerTasks();
     }
 
     public Settings getSettings() {
@@ -67,6 +69,7 @@ public final class FWChatControl extends JavaPlugin {
         settings.setMaxCapsCharPercentage(config.getConfig().getInt("maxCapsCharPercentage"));
         settings.setWarnIfUsingCaps(config.getConfig().getBoolean("warnIfCapsing"));
         settings.setWarnIfUsingBannedWords(config.getConfig().getBoolean("warnIfUsingBannedWords"));
+        settings.setReduceWarnPeriod(config.getConfig().getInt("reduceWarnPeriod"));
         loadPunishments(config);
         loadRegexes(config);
     }
@@ -83,12 +86,20 @@ public final class FWChatControl extends JavaPlugin {
         });
     }
 
+    private void instantiateControllers(){
+        warnController = new WarnController(this);
+    }
+
     private void registerCommands(){
         getCommand("fwcc").setExecutor(new AdminCommand(this));
     }
 
     private void registerListeners() {
         getServer().getPluginManager().registerEvents(new ChatListener(this), this);
+    }
+
+    private  void registerTasks(){
+        new ReduceWarnTask(this);
     }
 
     private void hookEssentials() {

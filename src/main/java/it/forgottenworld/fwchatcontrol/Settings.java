@@ -14,6 +14,7 @@ public class Settings {
     private boolean warnIfUsingCaps = false;
     private boolean warnIfUsingBannedWords = true;
     private boolean capitalizeFirstLetter = false;
+    private int reduceWarnPeriod = 86400;
     private final Map<Integer, Punishment> punishments = new HashMap<>();
 
     public List<Pattern> getRegexes() {
@@ -82,5 +83,13 @@ public class Settings {
 
     public Punishment removePunishment(int warns){
         return punishments.remove(warns);
+    }
+
+    public int getReduceWarnPeriod() {
+        return reduceWarnPeriod;
+    }
+
+    public void setReduceWarnPeriod(int reduceWarnPeriod) {
+        this.reduceWarnPeriod = reduceWarnPeriod;
     }
 }
