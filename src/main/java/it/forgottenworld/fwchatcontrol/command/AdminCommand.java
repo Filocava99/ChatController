@@ -40,21 +40,21 @@ public class AdminCommand implements CommandExecutor {
             }else{
                 printHelp(sender);
             }
-        }else if(args[1].equalsIgnoreCase("setCaps")){
+        }else if(args[0].equalsIgnoreCase("setCaps")){
             setCapsPercentage(sender, args);
-        }else if(args[1].equalsIgnoreCase("reload")){
+        }else if(args[0].equalsIgnoreCase("reload")){
             reload(sender);
-        }else if(args[1].equalsIgnoreCase("warn")){
+        }else if(args[0].equalsIgnoreCase("warn")){
             warnPlayer(sender, args);
-        }else if(args[1].equalsIgnoreCase("removeWarn")){
+        }else if(args[0].equalsIgnoreCase("removeWarn")){
            removeWarn(sender, args);
-        }else if(args[1].equalsIgnoreCase("reset")){
+        }else if(args[0].equalsIgnoreCase("reset")){
             resetWarn(sender, args);
-        }else if(args[1].equalsIgnoreCase("punish")){
+        }else if(args[0].equalsIgnoreCase("punish")){
             forcePunishment(sender, args);
-        }else if(args[1].equalsIgnoreCase("ranking")){
+        }else if(args[0].equalsIgnoreCase("ranking")){
             playerWarnsRanking(sender);
-        }else if(args[1].equalsIgnoreCase("capitalize")){
+        }else if(args[0].equalsIgnoreCase("capitalize")){
             toggleFirstLetterCapitalization(sender);
         }else{
             printHelp(sender);
@@ -98,11 +98,11 @@ public class AdminCommand implements CommandExecutor {
     }
 
     private void forcePunishment(CommandSender sender, String[] args){
-        if(args.length < 4){
+        if(args.length < 3){
             sender.sendMessage(ChatColor.RED + "You must specify a player and a warn level!");
         }else{
-            OfflinePlayer player = Bukkit.getPlayer(args[2]);
-            int warns = Integer.parseInt(args[3]);
+            OfflinePlayer player = Bukkit.getPlayer(args[1]);
+            int warns = Integer.parseInt(args[2]);
             if(player != null){
                 plugin.getWarnController().punishPlayer(player, warns);
                 sender.sendMessage(ChatColor.GREEN + player.getName() + " has been punished!");
@@ -119,10 +119,10 @@ public class AdminCommand implements CommandExecutor {
     }
 
     private void removeWarn(CommandSender sender, String[] args){
-        if(args.length < 3){
+        if(args.length < 2){
             sender.sendMessage(ChatColor.RED + "You must specify a player!");
         }else{
-            OfflinePlayer player = Bukkit.getPlayer(args[2]);
+            OfflinePlayer player = Bukkit.getPlayer(args[1]);
             if(player != null){
                 plugin.getWarnController().removeWarn(player);
             }else{
@@ -132,10 +132,10 @@ public class AdminCommand implements CommandExecutor {
     }
 
     private void resetWarn(CommandSender sender, String[] args){
-        if(args.length < 3){
+        if(args.length < 2){
             sender.sendMessage(ChatColor.RED + "You must specify a player!");
         }else{
-            OfflinePlayer player = Bukkit.getPlayer(args[2]);
+            OfflinePlayer player = Bukkit.getPlayer(args[1]);
             if(player != null){
                 plugin.getWarnController().resetWarn(player);
             }else{
@@ -145,10 +145,10 @@ public class AdminCommand implements CommandExecutor {
     }
 
     private void warnPlayer(CommandSender sender, String[] args){
-        if(args.length < 3){
+        if(args.length < 2){
             sender.sendMessage(ChatColor.RED + "You must specify a player!");
         }else{
-            OfflinePlayer player = Bukkit.getPlayer(args[2]);
+            OfflinePlayer player = Bukkit.getPlayer(args[1]);
             if(player != null){
                 plugin.getWarnController().warnPlayer(player);
             }else{
@@ -158,10 +158,10 @@ public class AdminCommand implements CommandExecutor {
     }
 
     private void setCapsPercentage(CommandSender sender, String[] args){
-        if(args.length < 3){
+        if(args.length < 2){
             sender.sendMessage(ChatColor.RED + "You must specify the new caps percentage!");
         }else{
-            plugin.getSettings().setMaxCapsCharPercentage(Integer.parseInt(args[2]));
+            plugin.getSettings().setMaxCapsCharPercentage(Integer.parseInt(args[1]));
             sender.sendMessage(ChatColor.GREEN + "Caps percentage updated!");
             plugin.saveConfig();
         }
