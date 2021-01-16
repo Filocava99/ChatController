@@ -2,6 +2,8 @@ package it.forgottenworld.fwchatcontrol.command;
 
 import com.palmergames.bukkit.TownyChat.Chat;
 import it.forgottenworld.fwchatcontrol.FWChatControl;
+import it.forgottenworld.fwchatcontrol.punishment.Punishment;
+import it.forgottenworld.fwchatcontrol.punishment.PunishmentType;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -64,11 +66,39 @@ public class AdminCommand implements CommandExecutor {
             playerWarnsRanking(sender);
         }else if(args[0].equalsIgnoreCase("capitalize")){
             toggleFirstLetterCapitalization(sender);
+        }else if(args[0].equalsIgnoreCase("capsWarn")){
+            toggleWarnForCaps(sender);
+        }else if(args[0].equalsIgnoreCase("floodWarn")){
+            toggleWarnForFlooding(sender);
+        }else if(args[0].equalsIgnoreCase("bannedWordsWarn")){
+            toggleWarnForBannedWords(sender);
+        }else if(args[0].equalsIgnoreCase("add")){
+            addPunishment(sender, args);
+        }else if(args[0].equalsIgnoreCase("remove")){
+            removePunishment(sender, args);
         }else{
             args[0] = "1";
             printHelp(sender, args);
         }
         return true;
+    }
+
+    private void toggleWarnForCaps(CommandSender sender){
+        plugin.getSettings().setWarnIfUsingCaps(!plugin.getSettings().isWarnIfUsingCaps());
+        sender.sendMessage(ChatColor.GREEN + "Warn if exceeding caps limit now set to " + ChatColor.BOLD + plugin.getSettings().isCapitalizeFirstLetter());
+        plugin.saveConfig();
+    }
+
+    private void toggleWarnForBannedWords(CommandSender sender){
+        plugin.getSettings().setWarnIfUsingBannedWords(!plugin.getSettings().isWarnIfUsingBannedWords());
+        sender.sendMessage(ChatColor.GREEN + "Warn for using banned words now set to " + ChatColor.BOLD + plugin.getSettings().isCapitalizeFirstLetter());
+        plugin.saveConfig();
+    }
+
+    private void toggleWarnForFlooding(CommandSender sender){
+        plugin.getSettings().setWarnIfFlooding(!plugin.getSettings().isWarnIfFlooding());
+        sender.sendMessage(ChatColor.GREEN + "Warn for flooding now set to " + ChatColor.BOLD + plugin.getSettings().isCapitalizeFirstLetter());
+        plugin.saveConfig();
     }
 
     private void warnAll(CommandSender sender){
@@ -109,18 +139,50 @@ public class AdminCommand implements CommandExecutor {
                 sender.sendMessage(ChatColor.GREEN + "/fwcc reset <player>");
                 sender.sendMessage(ChatColor.GREEN + "/fwcc resetAll");
                 sender.sendMessage(ChatColor.GREEN + "/fwcc setCaps <percentage>");
-                sender.sendMessage(ChatColor.GREEN + "/fwcc capitalize");
                 sender.sendMessage(ChatColor.GREEN + "/fwcc ranking");
                 break;
             }
             case 2: {
+                sender.sendMessage(ChatColor.GREEN + "/fwcc capitalize");
+                sender.sendMessage(ChatColor.GREEN + "/fwcc capsWarn");
+                sender.sendMessage(ChatColor.GREEN + "/fwcc floodWarn");
+                sender.sendMessage(ChatColor.GREEN + "/fwcc bannedWordsWarn");
                 sender.sendMessage(ChatColor.GREEN + "/fwcc punish <player> <warnLevel>");
                 sender.sendMessage(ChatColor.GREEN + "/fwcc word ban <word>");
                 sender.sendMessage(ChatColor.GREEN + "/fwcc word list <page>");
                 sender.sendMessage(ChatColor.GREEN + "/fwcc word unban <word>");
+                sender.sendMessage(ChatColor.GREEN + "/fwcc add <warns> <type> <duration> " + ChatColor.GRAY + "Adds a new punishments for specified warns");
+                sender.sendMessage(ChatColor.GREEN + "/fwcc remove <warns> " + ChatColor.GRAY + "Removes the punishments for specified warns");
                 break;
             }
             default: sender.sendMessage(ChatColor.RED + "Invalid help page!");
+        }
+    }
+
+    private void addPunishment(CommandSender sender, String[] args){
+        if(args.length < 4){
+            sender.sendMessage(ChatColor.RED + "Missing parameters. Use /fwcc help for more information");
+        }else{
+            try{
+                Punishment punishment = new Punishment(PunishmentType.valueOf(args[2]),Integer.parseInt(args[3]));
+                plugin.getSettings().addPunishment(Integer.parseInt(args[1]),punishment);
+                sender.sendMessage(ChatColor.GREEN + "New punishment created!");
+            }catch (Exception e){
+                sender.sendMessage(ChatColor.RED + "Invalid parameters. Allowed punishments types: KICK, MUTE, BAN. Warns and duration must be integer values.");
+            }
+        }
+    }
+
+    private void removePunishment(CommandSender sender, String[] args){
+        if(args.length < 2){
+            sender.sendMessage(ChatColor.RED + "You must specify the warn points for the punishment to be removed!");
+        }else{
+            try{
+                plugin.getSettings().removePunishment(Integer.parseInt(args[1]));
+                sender.sendMessage(ChatColor.GREEN + "Punishment removed!");
+            }catch (Exception e){
+                sender.sendMessage(ChatColor.RED +"Warns must be an integer value!");
+            }
         }
     }
 
