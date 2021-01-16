@@ -168,10 +168,10 @@ public class AdminCommand implements CommandExecutor {
             try {
                 OfflinePlayer player = Bukkit.getOfflinePlayer(args[1]);
                 int warns = plugin.getWarnController().getPlayerWarnsCount().get(player.getUniqueId());
-                sender.sendMessage(ChatColor.BOLD + "" + ChatColor.GREEN + player.getName() + ChatColor.RESET + ChatColor.GREEN +
+                sender.sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD+ player.getName() + ChatColor.RESET + ChatColor.GREEN +
                         " has a total of " + ChatColor.BOLD + warns + ChatColor.RESET + ChatColor.GREEN + " warns");
             } catch (Exception e) {
-                sender.sendMessage(ChatColor.RED + "That player does not exist!");
+                sender.sendMessage(ChatColor.RED + "That player does not exist or doesn't have any warns!");
             }
         }
     }

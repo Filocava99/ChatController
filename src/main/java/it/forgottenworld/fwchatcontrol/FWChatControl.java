@@ -17,17 +17,24 @@ import java.util.regex.Pattern;
 
 public final class FWChatControl extends JavaPlugin {
 
+    private static FWChatControl INSTANCE;
+
     private final Settings settings = new Settings();
     private WarnController warnController;
     private Essentials essentials;
 
     @Override
     public void onEnable() {
+        INSTANCE = this;
         loadConfig();
         instantiateControllers();
         registerCommands();
         registerListeners();
         registerTasks();
+    }
+
+    public static FWChatControl getINSTANCE() {
+        return INSTANCE;
     }
 
     public Settings getSettings() {

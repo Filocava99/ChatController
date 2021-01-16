@@ -3,7 +3,9 @@ package it.forgottenworld.fwchatcontrol.listener;
 import it.forgottenworld.fwchatcontrol.FWChatControl;
 import it.forgottenworld.fwchatcontrol.Settings;
 import it.forgottenworld.fwchatcontrol.WarnController;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -33,12 +35,21 @@ public class ChatListener implements Listener {
     }
 
     private void controlMessage(AsyncPlayerChatEvent event){
+        OfflinePlayer player = Bukkit.getOfflinePlayer(event.getPlayer().getUniqueId());
         floodCheck(event);
         if (event.isCancelled()) return;
         String message = event.getMessage();
-        if (containsBannedWords(message)) warnController.warnPlayer(event.getPlayer());
+        if (containsBannedWords(message)) {
+            Bukkit.getScheduler().runTask(FWChatControl.getINSTANCE(),()->{
+                warnController.warnPlayer(player);
+            });
+        }
         if(checkIfViolatingCapsRules(message)){
-            if(settings.isWarnIfUsingCaps())warnController.warnPlayer(event.getPlayer());
+            if(settings.isWarnIfUsingCaps()){
+                Bukkit.getScheduler().runTask(FWChatControl.getINSTANCE(),()->{
+                    warnController.warnPlayer(player);
+                });
+            }
             message = message.toLowerCase();
         }
         event.setMessage(capitalizeFirstLetter(removeBannedWords(message)));
