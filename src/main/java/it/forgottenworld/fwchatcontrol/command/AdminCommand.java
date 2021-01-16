@@ -11,6 +11,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -30,7 +31,7 @@ public class AdminCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if(args.length == 0){
-            printHelp(sender);
+            printHelp(sender, args);
         }else if(args[0].equalsIgnoreCase("word")){
             if(args[1].equalsIgnoreCase("ban")){
                 banWord(sender, args);
@@ -39,7 +40,7 @@ public class AdminCommand implements CommandExecutor {
             }else if(args[1].equalsIgnoreCase("unban")){
                 unbanWord(sender, args);
             }else{
-                printHelp(sender);
+                printHelp(sender, args);
             }
         }else if(args[0].equalsIgnoreCase("setCaps")){
             setCapsPercentage(sender, args);
@@ -47,10 +48,16 @@ public class AdminCommand implements CommandExecutor {
             reload(sender);
         }else if(args[0].equalsIgnoreCase("warn")){
             warnPlayer(sender, args);
+        }else if(args[0].equalsIgnoreCase("warnAll")){
+            warnAll(sender);
         }else if(args[0].equalsIgnoreCase("reduce")){
            removeWarn(sender, args);
+        }else if(args[0].equalsIgnoreCase("reduceAll")){
+            reduceAll(sender);
         }else if(args[0].equalsIgnoreCase("reset")){
             resetWarn(sender, args);
+        }else if(args[0].equalsIgnoreCase("resetAll")){
+            resetAll(sender);
         }else if(args[0].equalsIgnoreCase("punish")){
             forcePunishment(sender, args);
         }else if(args[0].equalsIgnoreCase("ranking")){
@@ -58,28 +65,68 @@ public class AdminCommand implements CommandExecutor {
         }else if(args[0].equalsIgnoreCase("capitalize")){
             toggleFirstLetterCapitalization(sender);
         }else{
-            printHelp(sender);
+            args[0] = "1";
+            printHelp(sender, args);
         }
         return true;
     }
 
-    private void printHelp(CommandSender sender){
-        sender.sendMessage(ChatColor.GREEN + "/fwcc reload");
-        sender.sendMessage(ChatColor.GREEN + "/fwcc warn <player>");
-        sender.sendMessage(ChatColor.GREEN + "/fwcc reduce <player>");
-        sender.sendMessage(ChatColor.GREEN + "/fwcc reset <player>");
-        sender.sendMessage(ChatColor.GREEN + "/fwcc setCaps <percentage>");
-        sender.sendMessage(ChatColor.GREEN + "/fwcc capitalize");
-        sender.sendMessage(ChatColor.GREEN + "/fwcc ranking");
-        sender.sendMessage(ChatColor.GREEN + "/fwcc punish <player> <warnLevel>");
-        sender.sendMessage(ChatColor.GREEN + "/fwcc word ban <word>");
-        sender.sendMessage(ChatColor.GREEN + "/fwcc word list <page>");
-        sender.sendMessage(ChatColor.GREEN + "/fwcc word unban <word>");
+    private void warnAll(CommandSender sender){
+        Arrays.stream(Bukkit.getServer().getOfflinePlayers()).forEach(player -> plugin.getWarnController().warnPlayer(player));
+        sender.sendMessage(ChatColor.GREEN + "All players have been warned!");
+    }
+
+    private void reduceAll(CommandSender sender){
+        Arrays.stream(Bukkit.getServer().getOfflinePlayers()).forEach(player -> plugin.getWarnController().removeWarn(player));
+        sender.sendMessage(ChatColor.GREEN + "All players warn points have been reduced by one!");
+    }
+
+    private void resetAll(CommandSender sender){
+        Arrays.stream(Bukkit.getServer().getOfflinePlayers()).forEach(player -> plugin.getWarnController().resetWarn(player));
+        sender.sendMessage(ChatColor.GREEN + "All players warn points have been reset!");
+    }
+
+    private void printHelp(CommandSender sender, String[] args){
+        int index;
+        if(args.length == 0){
+            index = 1;
+        }else{
+            try{
+                index = Integer.parseInt(args[0]);
+            }catch (Exception e){
+                index = 1;
+            }
+        }
+        sender.sendMessage(ChatColor.GREEN + "------{ " + ChatColor.GOLD + "FWChatControl" + ChatColor.GREEN + " }------");
+        switch (index){
+            case 1: {
+                sender.sendMessage(ChatColor.GREEN + "/fwcc help [page]");
+                sender.sendMessage(ChatColor.GREEN + "/fwcc reload");
+                sender.sendMessage(ChatColor.GREEN + "/fwcc warn <player>");
+                sender.sendMessage(ChatColor.GREEN + "/fwcc warnAll");
+                sender.sendMessage(ChatColor.GREEN + "/fwcc reduce <player>");
+                sender.sendMessage(ChatColor.GREEN + "/fwcc reduceAll");
+                sender.sendMessage(ChatColor.GREEN + "/fwcc reset <player>");
+                sender.sendMessage(ChatColor.GREEN + "/fwcc resetAll");
+                sender.sendMessage(ChatColor.GREEN + "/fwcc setCaps <percentage>");
+                sender.sendMessage(ChatColor.GREEN + "/fwcc capitalize");
+                sender.sendMessage(ChatColor.GREEN + "/fwcc ranking");
+                break;
+            }
+            case 2: {
+                sender.sendMessage(ChatColor.GREEN + "/fwcc punish <player> <warnLevel>");
+                sender.sendMessage(ChatColor.GREEN + "/fwcc word ban <word>");
+                sender.sendMessage(ChatColor.GREEN + "/fwcc word list <page>");
+                sender.sendMessage(ChatColor.GREEN + "/fwcc word unban <word>");
+                break;
+            }
+            default: sender.sendMessage(ChatColor.RED + "Invalid help page!");
+        }
     }
 
     private void banWord(CommandSender sender, String[] args){
         if(args.length < 3){
-            printHelp(sender);
+            sender.sendMessage(ChatColor.RED + "Missing parameters. Use /fwcc help for more information");
         }else{
             StringBuilder stringBuilder = new StringBuilder();
             String wordToBan = String.join(" ",Arrays.copyOfRange(args,2,args.length));
@@ -207,7 +254,7 @@ public class AdminCommand implements CommandExecutor {
 
     private void unbanWord(CommandSender sender, String[] args){
         if(args.length < 3){
-            printHelp(sender);
+            sender.sendMessage(ChatColor.RED + "Missing parameters. Use /fwcc help for more information");
         }else{
             plugin.getSettings().getRegexes().removeIf(pattern -> pattern.pattern().equalsIgnoreCase(args[2]));
             sender.sendMessage(ChatColor.GREEN + "Regex " + ChatColor.DARK_GREEN + args[2] + ChatColor.GREEN + " deleted.");
