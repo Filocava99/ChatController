@@ -186,6 +186,7 @@ public class AdminCommand implements CommandExecutor {
                 Punishment punishment = new Punishment(PunishmentType.valueOf(args[2]), Integer.parseInt(args[3]));
                 plugin.getSettings().addPunishment(Integer.parseInt(args[1]), punishment);
                 sender.sendMessage(ChatColor.GREEN + "New punishment created!");
+                plugin.saveConfig();
             } catch (Exception e) {
                 sender.sendMessage(ChatColor.RED + "Invalid parameters. Allowed punishments types: KICK, MUTE, BAN. Warns and duration must be integer values.");
             }
@@ -199,6 +200,7 @@ public class AdminCommand implements CommandExecutor {
             try {
                 plugin.getSettings().removePunishment(Integer.parseInt(args[1]));
                 sender.sendMessage(ChatColor.GREEN + "Punishment removed!");
+                plugin.saveConfig();
             } catch (Exception e) {
                 sender.sendMessage(ChatColor.RED + "Warns must be an integer value!");
             }
