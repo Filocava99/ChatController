@@ -1,6 +1,5 @@
 package it.forgottenworld.fwchatcontrol.command;
 
-import com.palmergames.bukkit.TownyChat.Chat;
 import it.forgottenworld.fwchatcontrol.FWChatControl;
 import it.forgottenworld.fwchatcontrol.punishment.Punishment;
 import it.forgottenworld.fwchatcontrol.punishment.PunishmentType;
@@ -13,7 +12,6 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
