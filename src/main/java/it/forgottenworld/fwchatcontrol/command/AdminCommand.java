@@ -32,103 +32,105 @@ public class AdminCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if(args.length == 0){
+        if (args.length == 0) {
             printHelp(sender, args);
-        }else if(args[0].equalsIgnoreCase("word")){
-            if(args[1].equalsIgnoreCase("ban")){
+        } else if (args[0].equalsIgnoreCase("word")) {
+            if (args[1].equalsIgnoreCase("ban")) {
                 banWord(sender, args);
-            }else if(args[1].equalsIgnoreCase("list")){
+            } else if (args[1].equalsIgnoreCase("list")) {
                 list(sender, args);
-            }else if(args[1].equalsIgnoreCase("unban")){
+            } else if (args[1].equalsIgnoreCase("unban")) {
                 unbanWord(sender, args);
-            }else{
+            } else {
                 printHelp(sender, args);
             }
-        }else if(args[0].equalsIgnoreCase("setCaps")){
+        } else if (args[0].equalsIgnoreCase("setCaps")) {
             setCapsPercentage(sender, args);
-        }else if(args[0].equalsIgnoreCase("reload")){
+        } else if (args[0].equalsIgnoreCase("reload")) {
             reload(sender);
-        }else if(args[0].equalsIgnoreCase("warn")){
+        } else if (args[0].equalsIgnoreCase("warn")) {
             warnPlayer(sender, args);
-        }else if(args[0].equalsIgnoreCase("warnAll")){
+        } else if (args[0].equalsIgnoreCase("warnAll")) {
             warnAll(sender);
-        }else if(args[0].equalsIgnoreCase("reduce")){
-           removeWarn(sender, args);
-        }else if(args[0].equalsIgnoreCase("reduceAll")){
+        } else if (args[0].equalsIgnoreCase("reduce")) {
+            removeWarn(sender, args);
+        } else if (args[0].equalsIgnoreCase("reduceAll")) {
             reduceAll(sender);
-        }else if(args[0].equalsIgnoreCase("reset")){
+        } else if (args[0].equalsIgnoreCase("reset")) {
             resetWarn(sender, args);
-        }else if(args[0].equalsIgnoreCase("resetAll")){
+        } else if (args[0].equalsIgnoreCase("resetAll")) {
             resetAll(sender);
-        }else if(args[0].equalsIgnoreCase("punish")){
+        } else if (args[0].equalsIgnoreCase("punish")) {
             forcePunishment(sender, args);
-        }else if(args[0].equalsIgnoreCase("ranking")){
+        } else if (args[0].equalsIgnoreCase("ranking")) {
             playerWarnsRanking(sender);
-        }else if(args[0].equalsIgnoreCase("capitalize")){
+        } else if (args[0].equalsIgnoreCase("info")) {
+            info(sender, args);
+        } else if (args[0].equalsIgnoreCase("capitalize")) {
             toggleFirstLetterCapitalization(sender);
-        }else if(args[0].equalsIgnoreCase("capsWarn")){
+        } else if (args[0].equalsIgnoreCase("capsWarn")) {
             toggleWarnForCaps(sender);
-        }else if(args[0].equalsIgnoreCase("floodWarn")){
+        } else if (args[0].equalsIgnoreCase("floodWarn")) {
             toggleWarnForFlooding(sender);
-        }else if(args[0].equalsIgnoreCase("bannedWordsWarn")){
+        } else if (args[0].equalsIgnoreCase("bannedWordsWarn")) {
             toggleWarnForBannedWords(sender);
-        }else if(args[0].equalsIgnoreCase("add")){
+        } else if (args[0].equalsIgnoreCase("add")) {
             addPunishment(sender, args);
-        }else if(args[0].equalsIgnoreCase("remove")){
+        } else if (args[0].equalsIgnoreCase("remove")) {
             removePunishment(sender, args);
-        }else{
+        } else {
             args[0] = "1";
             printHelp(sender, args);
         }
         return true;
     }
 
-    private void toggleWarnForCaps(CommandSender sender){
+    private void toggleWarnForCaps(CommandSender sender) {
         plugin.getSettings().setWarnIfUsingCaps(!plugin.getSettings().isWarnIfUsingCaps());
         sender.sendMessage(ChatColor.GREEN + "Warn if exceeding caps limit now set to " + ChatColor.BOLD + plugin.getSettings().isCapitalizeFirstLetter());
         plugin.saveConfig();
     }
 
-    private void toggleWarnForBannedWords(CommandSender sender){
+    private void toggleWarnForBannedWords(CommandSender sender) {
         plugin.getSettings().setWarnIfUsingBannedWords(!plugin.getSettings().isWarnIfUsingBannedWords());
         sender.sendMessage(ChatColor.GREEN + "Warn for using banned words now set to " + ChatColor.BOLD + plugin.getSettings().isCapitalizeFirstLetter());
         plugin.saveConfig();
     }
 
-    private void toggleWarnForFlooding(CommandSender sender){
+    private void toggleWarnForFlooding(CommandSender sender) {
         plugin.getSettings().setWarnIfFlooding(!plugin.getSettings().isWarnIfFlooding());
         sender.sendMessage(ChatColor.GREEN + "Warn for flooding now set to " + ChatColor.BOLD + plugin.getSettings().isCapitalizeFirstLetter());
         plugin.saveConfig();
     }
 
-    private void warnAll(CommandSender sender){
+    private void warnAll(CommandSender sender) {
         Arrays.stream(Bukkit.getServer().getOfflinePlayers()).forEach(player -> plugin.getWarnController().warnPlayer(player));
         sender.sendMessage(ChatColor.GREEN + "All players have been warned!");
     }
 
-    private void reduceAll(CommandSender sender){
+    private void reduceAll(CommandSender sender) {
         Arrays.stream(Bukkit.getServer().getOfflinePlayers()).forEach(player -> plugin.getWarnController().removeWarn(player));
         sender.sendMessage(ChatColor.GREEN + "All players warn points have been reduced by one!");
     }
 
-    private void resetAll(CommandSender sender){
+    private void resetAll(CommandSender sender) {
         Arrays.stream(Bukkit.getServer().getOfflinePlayers()).forEach(player -> plugin.getWarnController().resetWarn(player));
         sender.sendMessage(ChatColor.GREEN + "All players warn points have been reset!");
     }
 
-    private void printHelp(CommandSender sender, String[] args){
+    private void printHelp(CommandSender sender, String[] args) {
         int index;
-        if(args.length == 0){
+        if (args.length == 0) {
             index = 1;
-        }else{
-            try{
+        } else {
+            try {
                 index = Integer.parseInt(args[0]);
-            }catch (Exception e){
+            } catch (Exception e) {
                 index = 1;
             }
         }
         sender.sendMessage(ChatColor.GREEN + "------{ " + ChatColor.GOLD + "FWChatControl" + ChatColor.GREEN + " }------");
-        switch (index){
+        switch (index) {
             case 1: {
                 sender.sendMessage(ChatColor.GREEN + "/fwcc help [page]");
                 sender.sendMessage(ChatColor.GREEN + "/fwcc reload");
@@ -140,6 +142,7 @@ public class AdminCommand implements CommandExecutor {
                 sender.sendMessage(ChatColor.GREEN + "/fwcc resetAll");
                 sender.sendMessage(ChatColor.GREEN + "/fwcc setCaps <percentage>");
                 sender.sendMessage(ChatColor.GREEN + "/fwcc ranking");
+                sender.sendMessage(ChatColor.GREEN + "/fwcc info <player>");
                 break;
             }
             case 2: {
@@ -155,44 +158,60 @@ public class AdminCommand implements CommandExecutor {
                 sender.sendMessage(ChatColor.GREEN + "/fwcc remove <warns> " + ChatColor.GRAY + "Removes the punishments for specified warns");
                 break;
             }
-            default: sender.sendMessage(ChatColor.RED + "Invalid help page!");
+            default:
+                sender.sendMessage(ChatColor.RED + "Invalid help page!");
         }
     }
 
-    private void addPunishment(CommandSender sender, String[] args){
-        if(args.length < 4){
+    private void info(CommandSender sender, String[] args) {
+        if (args.length < 2) {
+            sender.sendMessage(ChatColor.RED + "You must specify the player name!");
+        } else {
+            try {
+                OfflinePlayer player = Bukkit.getOfflinePlayer(args[1]);
+                int warns = plugin.getWarnController().getPlayerWarnsCount().get(player.getUniqueId());
+                sender.sendMessage(ChatColor.BOLD + "" + ChatColor.GREEN + player.getName() + ChatColor.RESET + ChatColor.GREEN +
+                        " has a total of " + ChatColor.BOLD + warns + ChatColor.RESET + ChatColor.GREEN + " warns");
+            } catch (Exception e) {
+                sender.sendMessage(ChatColor.RED + "That player does not exist!");
+            }
+        }
+    }
+
+    private void addPunishment(CommandSender sender, String[] args) {
+        if (args.length < 4) {
             sender.sendMessage(ChatColor.RED + "Missing parameters. Use /fwcc help for more information");
-        }else{
-            try{
-                Punishment punishment = new Punishment(PunishmentType.valueOf(args[2]),Integer.parseInt(args[3]));
-                plugin.getSettings().addPunishment(Integer.parseInt(args[1]),punishment);
+        } else {
+            try {
+                Punishment punishment = new Punishment(PunishmentType.valueOf(args[2]), Integer.parseInt(args[3]));
+                plugin.getSettings().addPunishment(Integer.parseInt(args[1]), punishment);
                 sender.sendMessage(ChatColor.GREEN + "New punishment created!");
-            }catch (Exception e){
+            } catch (Exception e) {
                 sender.sendMessage(ChatColor.RED + "Invalid parameters. Allowed punishments types: KICK, MUTE, BAN. Warns and duration must be integer values.");
             }
         }
     }
 
-    private void removePunishment(CommandSender sender, String[] args){
-        if(args.length < 2){
+    private void removePunishment(CommandSender sender, String[] args) {
+        if (args.length < 2) {
             sender.sendMessage(ChatColor.RED + "You must specify the warn points for the punishment to be removed!");
-        }else{
-            try{
+        } else {
+            try {
                 plugin.getSettings().removePunishment(Integer.parseInt(args[1]));
                 sender.sendMessage(ChatColor.GREEN + "Punishment removed!");
-            }catch (Exception e){
-                sender.sendMessage(ChatColor.RED +"Warns must be an integer value!");
+            } catch (Exception e) {
+                sender.sendMessage(ChatColor.RED + "Warns must be an integer value!");
             }
         }
     }
 
-    private void banWord(CommandSender sender, String[] args){
-        if(args.length < 3){
+    private void banWord(CommandSender sender, String[] args) {
+        if (args.length < 3) {
             sender.sendMessage(ChatColor.RED + "Missing parameters. Use /fwcc help for more information");
-        }else{
+        } else {
             StringBuilder stringBuilder = new StringBuilder();
-            String wordToBan = String.join(" ",Arrays.copyOfRange(args,2,args.length));
-            for(char c : wordToBan.toCharArray()){
+            String wordToBan = String.join(" ", Arrays.copyOfRange(args, 2, args.length));
+            for (char c : wordToBan.toCharArray()) {
                 stringBuilder.append("[").append(c == ' ' ? "\\s" : c).append("]");
             }
             plugin.getSettings().getRegexes().add(Pattern.compile(stringBuilder.toString()));
@@ -200,7 +219,7 @@ public class AdminCommand implements CommandExecutor {
         }
     }
 
-    private void playerWarnsRanking(CommandSender sender){
+    private void playerWarnsRanking(CommandSender sender) {
         ComponentBuilder componentBuilder = new ComponentBuilder();
         plugin.getWarnController().getPlayerWarnsCount().entrySet().stream().limit(10).forEach(uuidIntegerEntry -> {
             componentBuilder.append(ChatColor.GREEN + Bukkit.getPlayer(uuidIntegerEntry.getKey()).getName() + " " + uuidIntegerEntry.getValue() + " warn points");
@@ -208,84 +227,84 @@ public class AdminCommand implements CommandExecutor {
         sender.spigot().sendMessage(componentBuilder.create());
     }
 
-    private void forcePunishment(CommandSender sender, String[] args){
-        if(args.length < 3){
+    private void forcePunishment(CommandSender sender, String[] args) {
+        if (args.length < 3) {
             sender.sendMessage(ChatColor.RED + "You must specify a player and a warn level!");
-        }else{
+        } else {
             OfflinePlayer player = Bukkit.getPlayer(args[1]);
             int warns = Integer.parseInt(args[2]);
-            if(player != null){
+            if (player != null) {
                 plugin.getWarnController().punishPlayer(player, warns);
                 sender.sendMessage(ChatColor.GREEN + player.getName() + " has been punished!");
-            }else{
+            } else {
                 sender.sendMessage(ChatColor.RED + "That player does not exists!");
             }
         }
     }
 
-    private void toggleFirstLetterCapitalization(CommandSender sender){
+    private void toggleFirstLetterCapitalization(CommandSender sender) {
         plugin.getSettings().setCapitalizeFirstLetter(!plugin.getSettings().isCapitalizeFirstLetter());
         sender.sendMessage(ChatColor.GREEN + "First letter capitalization now set to " + ChatColor.BOLD + plugin.getSettings().isCapitalizeFirstLetter());
         plugin.saveConfig();
     }
 
-    private void removeWarn(CommandSender sender, String[] args){
-        if(args.length < 2){
+    private void removeWarn(CommandSender sender, String[] args) {
+        if (args.length < 2) {
             sender.sendMessage(ChatColor.RED + "You must specify a player!");
-        }else{
+        } else {
             OfflinePlayer player = Bukkit.getPlayer(args[1]);
-            if(player != null){
+            if (player != null) {
                 plugin.getWarnController().removeWarn(player);
                 sender.sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + player.getName() + ChatColor.RESET + "" + ChatColor.GREEN + " has been warned!");
-            }else{
+            } else {
                 sender.sendMessage(ChatColor.RED + "That player does not exists!");
             }
         }
     }
 
-    private void resetWarn(CommandSender sender, String[] args){
-        if(args.length < 2){
+    private void resetWarn(CommandSender sender, String[] args) {
+        if (args.length < 2) {
             sender.sendMessage(ChatColor.RED + "You must specify a player!");
-        }else{
+        } else {
             OfflinePlayer player = Bukkit.getPlayer(args[1]);
-            if(player != null){
+            if (player != null) {
                 plugin.getWarnController().resetWarn(player);
                 sender.sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + player.getName() + ChatColor.RESET + "" + ChatColor.GREEN + " warns have been reset!");
-            }else{
+            } else {
                 sender.sendMessage(ChatColor.RED + "That player does not exists!");
             }
         }
     }
 
-    private void warnPlayer(CommandSender sender, String[] args){
-        if(args.length < 2){
+    private void warnPlayer(CommandSender sender, String[] args) {
+        if (args.length < 2) {
             sender.sendMessage(ChatColor.RED + "You must specify a player!");
-        }else{
+        } else {
             OfflinePlayer player = Bukkit.getPlayer(args[1]);
-            if(player != null){
+            if (player != null) {
                 plugin.getWarnController().warnPlayer(player);
-            }else{
+            } else {
                 sender.sendMessage(ChatColor.RED + "That player does not exists!");
             }
         }
     }
 
-    private void setCapsPercentage(CommandSender sender, String[] args){
-        if(args.length < 2){
+    private void setCapsPercentage(CommandSender sender, String[] args) {
+        if (args.length < 2) {
             sender.sendMessage(ChatColor.RED + "You must specify the new caps percentage!");
-        }else{
+        } else {
             plugin.getSettings().setMaxCapsCharPercentage(Integer.parseInt(args[1]));
             sender.sendMessage(ChatColor.GREEN + "Caps percentage updated!");
             plugin.saveConfig();
         }
     }
 
-    private void reload(CommandSender sender){
+    private void reload(CommandSender sender) {
         sender.sendMessage(ChatColor.GREEN + "Config reloaded!");
         plugin.reloadConfig();
     }
 
-    private void list(CommandSender sender, String[] args){
+    private void list(CommandSender sender, String[] args) {
         int currentPage = args.length < 3 ? 1 : Integer.parseInt(args[2]);
         ComponentBuilder componentBuilder = new ComponentBuilder(ChatColor.GREEN + "-------------- Banned words --------------\n");
         TextComponent nextPageComponent = getArrow(">>", "/fwcc word list " + (currentPage + 1));
@@ -314,10 +333,10 @@ public class AdminCommand implements CommandExecutor {
         sender.spigot().sendMessage(componentBuilder.create());
     }
 
-    private void unbanWord(CommandSender sender, String[] args){
-        if(args.length < 3){
+    private void unbanWord(CommandSender sender, String[] args) {
+        if (args.length < 3) {
             sender.sendMessage(ChatColor.RED + "Missing parameters. Use /fwcc help for more information");
-        }else{
+        } else {
             plugin.getSettings().getRegexes().removeIf(pattern -> pattern.pattern().equalsIgnoreCase(args[2]));
             sender.sendMessage(ChatColor.GREEN + "Regex " + ChatColor.DARK_GREEN + args[2] + ChatColor.GREEN + " deleted.");
             plugin.saveConfig();
