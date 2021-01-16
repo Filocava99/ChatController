@@ -118,11 +118,11 @@ public class AdminCommand implements CommandExecutor {
 
     private void printHelp(CommandSender sender, String[] args) {
         int index;
-        if (args.length == 0) {
+        if (args.length < 2) {
             index = 1;
         } else {
             try {
-                index = Integer.parseInt(args[0]);
+                index = Integer.parseInt(args[1]);
             } catch (Exception e) {
                 index = 1;
             }
