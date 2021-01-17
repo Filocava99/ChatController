@@ -130,7 +130,7 @@ public final class FWChatControl extends JavaPlugin {
         ConfigurationSection punishmentsSection = configuration.createSection("punishments");
         settings.getPunishments().forEach((warns, punishment) -> {
             ConfigurationSection punishmentSection = punishmentsSection.createSection(String.valueOf(warns));
-            punishmentSection.set("punishment", punishment.getType().toString());
+            punishmentSection.set("type", punishment.getType().toString());
             punishmentSection.set("duration", punishment.getDuration());
         });
         configuration.set("bannedWords", settings.getRegexes().stream().map(regex -> regex.pattern()).toArray(String[]::new));

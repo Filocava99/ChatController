@@ -216,6 +216,7 @@ public class AdminCommand implements CommandExecutor {
             }
             plugin.getSettings().getRegexes().add(Pattern.compile(stringBuilder.toString()));
             plugin.saveConfig();
+            sender.sendMessage(ChatColor.GREEN + "The word " + ChatColor.YELLOW + wordToBan + ChatColor.GREEN + " has been banned!");
         }
     }
 
