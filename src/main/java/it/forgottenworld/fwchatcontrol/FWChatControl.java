@@ -33,6 +33,11 @@ public final class FWChatControl extends JavaPlugin {
         registerTasks();
     }
 
+    @Override
+    public void onDisable(){
+        warnController.saveWarns();
+    }
+
     public static FWChatControl getINSTANCE() {
         return INSTANCE;
     }

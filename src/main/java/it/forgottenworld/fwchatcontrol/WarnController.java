@@ -43,7 +43,6 @@ public class WarnController {
         if (playerWarnsCount.containsKey(playerUUID)) {
             int warns = Math.max(0, playerWarnsCount.get(playerUUID) - 1);
             playerWarnsCount.put(playerUUID, warns);
-            saveWarns();
         }
     }
 
@@ -60,7 +59,6 @@ public class WarnController {
             punishPlayer(player, warns);
         }
         playerWarnsCount.put(playerUUID, warns);
-        saveWarns();
     }
 
     public void punishPlayer(OfflinePlayer player, int warns){
@@ -91,12 +89,13 @@ public class WarnController {
     }
 
     public void saveWarns() {
-        try {
-            ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(warnsFile, false));
-            objectOutputStream.writeObject(playerWarnsCount);
-        } catch (IOException e) {
-            Bukkit.getLogger().log(Level.SEVERE, "Error while saving warns to warns.dat file");
-        }
+        Bukkit.getScheduler().runTaskAsynchronously(FWChatControl.getINSTANCE(),() -> {
+            try(ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(warnsFile, false))) {
+                objectOutputStream.writeObject(playerWarnsCount);
+            } catch (IOException e) {
+                Bukkit.getLogger().log(Level.SEVERE, "Error while saving warns to warns.dat file");
+            }
+        });
     }
 
     public void loadWarns() {
