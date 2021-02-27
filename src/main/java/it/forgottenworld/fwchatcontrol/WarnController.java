@@ -30,23 +30,25 @@ public class WarnController {
         return playerWarnsCount;
     }
 
-    public void resetWarn(OfflinePlayer player){
+    public void resetWarn(OfflinePlayer player) {
         playerWarnsCount.remove(player.getUniqueId());
     }
 
-    public void removeWarn(OfflinePlayer player){
+    public void removeWarn(OfflinePlayer player) {
         UUID playerUUID = player.getUniqueId();
-        if (playerWarnsCount.containsKey(playerUUID)) {
-            int warns = Math.max(0, playerWarnsCount.get(playerUUID) - 1);
+        Integer warns = playerWarnsCount.get(playerUUID);
+        if(warns != null){
+            warns = Math.max(0, warns - 1);
             playerWarnsCount.put(playerUUID, warns);
         }
     }
 
     public void warnPlayer(OfflinePlayer player) {
         UUID playerUUID = player.getUniqueId();
-        int warns = playerWarnsCount.containsKey(playerUUID) ? playerWarnsCount.get(playerUUID) + 1 : 1;
-        if (warns != 0 && player.isOnline()) {
-            Player onlinePlayer = Bukkit.getPlayer(playerUUID);
+        Integer warns = playerWarnsCount.get(playerUUID);
+        warns = warns == null ? 1 : warns;
+        Player onlinePlayer = Bukkit.getPlayer(playerUUID);
+        if (onlinePlayer != null) {
             onlinePlayer.sendMessage(ChatColor.RED + "You have been warned for using an illegal word!");
             onlinePlayer.sendMessage(ChatColor.RED + "You have a total of " + ChatColor.DARK_RED + warns + ChatColor.RED + " warns.");
         }
@@ -56,19 +58,19 @@ public class WarnController {
         playerWarnsCount.put(playerUUID, warns);
     }
 
-    public void punishPlayer(OfflinePlayer player, int warns){
+    public void punishPlayer(OfflinePlayer player, int warns) {
         Punishment punishment = settings.getPunishments().get(warns);
-        if(punishment.getType() == PunishmentType.MUTE){
+        if (punishment.getType() == PunishmentType.MUTE) {
             Player onlinePlayer = Bukkit.getPlayer(player.getUniqueId());
-            if(onlinePlayer != null){
+            if (onlinePlayer != null) {
                 onlinePlayer.sendMessage(ChatColor.RED + "You have been temporarily muted for having reached " + warns + " warn points!");
             }
             mutePlayer(player, punishment.getDuration());
         } else if (punishment.getType() == PunishmentType.KICK) {
-            if(player.isOnline()){
+            if (player.isOnline()) {
                 Bukkit.getPlayer(player.getUniqueId()).kickPlayer("You have been kicked for having reached " + warns + " warn points!");
             }
-        }else if(punishment.getType() == PunishmentType.BAN){
+        } else if (punishment.getType() == PunishmentType.BAN) {
             banPlayer(player, warns);
         }
     }
@@ -77,13 +79,13 @@ public class WarnController {
         Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "mute " + player.getName() + " " + durationInSeconds + "s");
     }
 
-    private void banPlayer(OfflinePlayer player, int durationInSeconds){
+    private void banPlayer(OfflinePlayer player, int durationInSeconds) {
         Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "tempban " + player.getName() + " " + durationInSeconds + "s");
     }
 
     public void saveWarns() {
-        Bukkit.getScheduler().runTaskAsynchronously(FWChatControl.getINSTANCE(),() -> {
-            try(ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(warnsFile, false))) {
+        Bukkit.getScheduler().runTaskAsynchronously(FWChatControl.getINSTANCE(), () -> {
+            try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(warnsFile, false))) {
                 objectOutputStream.writeObject(playerWarnsCount);
             } catch (IOException e) {
                 Bukkit.getLogger().log(Level.SEVERE, "Error while saving warns to warns.dat file");
