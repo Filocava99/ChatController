@@ -1,13 +1,11 @@
 package it.forgottenworld.fwchatcontrol;
 
-import com.earth2me.essentials.Essentials;
 import it.forgottenworld.fwchatcontrol.punishment.Punishment;
 import it.forgottenworld.fwchatcontrol.punishment.PunishmentType;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitTask;
 
 import java.io.*;
 import java.util.HashMap;
@@ -17,14 +15,12 @@ import java.util.logging.Level;
 
 public class WarnController {
 
-    private final Essentials essentials;
     private final Settings settings;
     private final File warnsFile;
 
     private Map<UUID, Integer> playerWarnsCount;
 
     public WarnController(FWChatControl chatControl) {
-        this.essentials = chatControl.getEssentials();
         this.settings = chatControl.getSettings();
         this.warnsFile = new File(chatControl.getDataFolder(), "warns.dat");
         loadWarns();
@@ -51,7 +47,6 @@ public class WarnController {
         int warns = playerWarnsCount.containsKey(playerUUID) ? playerWarnsCount.get(playerUUID) + 1 : 1;
         if (warns != 0 && player.isOnline()) {
             Player onlinePlayer = Bukkit.getPlayer(playerUUID);
-            assert onlinePlayer != null;
             onlinePlayer.sendMessage(ChatColor.RED + "You have been warned for using an illegal word!");
             onlinePlayer.sendMessage(ChatColor.RED + "You have a total of " + ChatColor.DARK_RED + warns + ChatColor.RED + " warns.");
         }
@@ -64,12 +59,10 @@ public class WarnController {
     public void punishPlayer(OfflinePlayer player, int warns){
         Punishment punishment = settings.getPunishments().get(warns);
         if(punishment.getType() == PunishmentType.MUTE){
-            if(player.isOnline()){
-                Player onlinePlayer = Bukkit.getPlayer(player.getUniqueId());
-                assert onlinePlayer != null;
+            Player onlinePlayer = Bukkit.getPlayer(player.getUniqueId());
+            if(onlinePlayer != null){
                 onlinePlayer.sendMessage(ChatColor.RED + "You have been temporarily muted for having reached " + warns + " warn points!");
             }
-            //String muteReason = "Reached " + warns + " warn points";
             mutePlayer(player, punishment.getDuration());
         } else if (punishment.getType() == PunishmentType.KICK) {
             if(player.isOnline()){
