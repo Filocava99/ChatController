@@ -46,7 +46,7 @@ public class WarnController {
     public void warnPlayer(OfflinePlayer player) {
         UUID playerUUID = player.getUniqueId();
         Integer warns = playerWarnsCount.get(playerUUID);
-        warns = warns == null ? 1 : warns;
+        warns = warns == null ? 1 : warns+1;
         Player onlinePlayer = Bukkit.getPlayer(playerUUID);
         if (onlinePlayer != null) {
             onlinePlayer.sendMessage(ChatColor.RED + "You have been warned for using an illegal word!");

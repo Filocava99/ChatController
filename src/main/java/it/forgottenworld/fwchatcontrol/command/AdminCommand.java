@@ -223,7 +223,7 @@ public class AdminCommand implements CommandExecutor {
     private void playerWarnsRanking(CommandSender sender) {
         ComponentBuilder componentBuilder = new ComponentBuilder();
         plugin.getWarnController().getPlayerWarnsCount().entrySet().stream().limit(10).forEach(uuidIntegerEntry -> {
-            componentBuilder.append(ChatColor.GREEN + Bukkit.getPlayer(uuidIntegerEntry.getKey()).getName() + " " + uuidIntegerEntry.getValue() + " warn points");
+            componentBuilder.append(ChatColor.GREEN + Bukkit.getOfflinePlayer(uuidIntegerEntry.getKey()).getName() + " " + uuidIntegerEntry.getValue() + " warn points");
         });
         sender.spigot().sendMessage(componentBuilder.create());
     }
