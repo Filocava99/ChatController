@@ -91,13 +91,13 @@ public class AdminCommand implements CommandExecutor {
 
     private void toggleWarnForBannedWords(CommandSender sender) {
         plugin.getSettings().setWarnIfUsingBannedWords(!plugin.getSettings().isWarnIfUsingBannedWords());
-        sender.sendMessage(ChatColor.GREEN + "Warn for using banned words now set to " + ChatColor.BOLD + plugin.getSettings().isCapitalizeFirstLetter());
+        sender.sendMessage(ChatColor.GREEN + "Warn for using banned words now set to " + ChatColor.BOLD + plugin.getSettings().isWarnIfUsingBannedWords());
         plugin.saveConfig();
     }
 
     private void toggleWarnForFlooding(CommandSender sender) {
         plugin.getSettings().setWarnIfFlooding(!plugin.getSettings().isWarnIfFlooding());
-        sender.sendMessage(ChatColor.GREEN + "Warn for flooding now set to " + ChatColor.BOLD + plugin.getSettings().isCapitalizeFirstLetter());
+        sender.sendMessage(ChatColor.GREEN + "Warn for flooding now set to " + ChatColor.BOLD + plugin.getSettings().isWarnIfFlooding());
         plugin.saveConfig();
     }
 
