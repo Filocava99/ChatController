@@ -85,7 +85,7 @@ public class AdminCommand implements CommandExecutor {
 
     private void toggleWarnForCaps(CommandSender sender) {
         plugin.getSettings().setWarnIfUsingCaps(!plugin.getSettings().isWarnIfUsingCaps());
-        sender.sendMessage(ChatColor.GREEN + "Warn if exceeding caps limit now set to " + ChatColor.BOLD + plugin.getSettings().isCapitalizeFirstLetter());
+        sender.sendMessage(ChatColor.GREEN + "Warn if exceeding caps limit now set to " + ChatColor.BOLD + plugin.getSettings().isWarnIfUsingCaps());
         plugin.saveConfig();
     }
 
@@ -223,7 +223,7 @@ public class AdminCommand implements CommandExecutor {
     private void playerWarnsRanking(CommandSender sender) {
         ComponentBuilder componentBuilder = new ComponentBuilder();
         plugin.getWarnController().getPlayerWarnsCount().entrySet().stream().limit(10).forEach(uuidIntegerEntry -> {
-            componentBuilder.append(ChatColor.GREEN + Bukkit.getOfflinePlayer(uuidIntegerEntry.getKey()).getName() + " " + uuidIntegerEntry.getValue() + " warn points");
+            componentBuilder.append(ChatColor.GREEN + Bukkit.getOfflinePlayer(uuidIntegerEntry.getKey()).getName() + " " + uuidIntegerEntry.getValue() + " warn points\n");
         });
         sender.spigot().sendMessage(componentBuilder.create());
     }

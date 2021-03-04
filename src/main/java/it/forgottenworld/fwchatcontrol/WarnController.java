@@ -49,7 +49,7 @@ public class WarnController {
         warns = warns == null ? 1 : warns+1;
         Player onlinePlayer = Bukkit.getPlayer(playerUUID);
         if (onlinePlayer != null) {
-            onlinePlayer.sendMessage(ChatColor.RED + "You have been warned for using an illegal word!");
+            onlinePlayer.sendMessage(ChatColor.RED + "Sei stato warnato per aver usato una parola vietata!");
             onlinePlayer.sendMessage(ChatColor.RED + "You have a total of " + ChatColor.DARK_RED + warns + ChatColor.RED + " warns.");
         }
         if (settings.getPunishments().containsKey(warns)) {
@@ -63,12 +63,12 @@ public class WarnController {
         if (punishment.getType() == PunishmentType.MUTE) {
             Player onlinePlayer = Bukkit.getPlayer(player.getUniqueId());
             if (onlinePlayer != null) {
-                onlinePlayer.sendMessage(ChatColor.RED + "You have been temporarily muted for having reached " + warns + " warn points!");
+                onlinePlayer.sendMessage(ChatColor.RED +  "Sei stato mutato temporaneamene per aver raggiunto " + warns + " warn points!");
             }
             mutePlayer(player, punishment.getDuration());
         } else if (punishment.getType() == PunishmentType.KICK) {
             if (player.isOnline()) {
-                Bukkit.getPlayer(player.getUniqueId()).kickPlayer("You have been kicked for having reached " + warns + " warn points!");
+                Bukkit.getPlayer(player.getUniqueId()).kickPlayer("Sei stato kickato per aver raggiunto " + warns + " warn points!");
             }
         } else if (punishment.getType() == PunishmentType.BAN) {
             banPlayer(player, warns);

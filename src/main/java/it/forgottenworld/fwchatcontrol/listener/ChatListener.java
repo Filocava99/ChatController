@@ -39,7 +39,7 @@ public class ChatListener implements Listener {
         floodCheck(event);
         if (event.isCancelled()) return;
         String message = event.getMessage();
-        if (containsBannedWords(message)) {
+        if (settings.isWarnIfUsingBannedWords() && containsBannedWords(message)) {
             Bukkit.getScheduler().runTask(FWChatControl.getINSTANCE(),()->{
                 warnController.warnPlayer(player);
             });
