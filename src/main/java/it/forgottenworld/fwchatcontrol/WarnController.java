@@ -37,7 +37,7 @@ public class WarnController {
     public void removeWarn(OfflinePlayer player) {
         UUID playerUUID = player.getUniqueId();
         Integer warns = playerWarnsCount.get(playerUUID);
-        if(warns != null){
+        if (warns != null) {
             warns = Math.max(0, warns - 1);
             playerWarnsCount.put(playerUUID, warns);
         }
@@ -46,7 +46,7 @@ public class WarnController {
     public void warnPlayer(OfflinePlayer player) {
         UUID playerUUID = player.getUniqueId();
         Integer warns = playerWarnsCount.get(playerUUID);
-        warns = warns == null ? 1 : warns+1;
+        warns = warns == null ? 1 : warns + 1;
         Player onlinePlayer = Bukkit.getPlayer(playerUUID);
         if (onlinePlayer != null) {
             onlinePlayer.sendMessage(ChatColor.RED + "Sei stato warnato per aver usato una parola vietata!");
@@ -63,7 +63,7 @@ public class WarnController {
         if (punishment.getType() == PunishmentType.MUTE) {
             Player onlinePlayer = Bukkit.getPlayer(player.getUniqueId());
             if (onlinePlayer != null) {
-                onlinePlayer.sendMessage(ChatColor.RED +  "Sei stato mutato temporaneamene per aver raggiunto " + warns + " warn points!");
+                onlinePlayer.sendMessage(ChatColor.RED + "Sei stato mutato temporaneamene per aver raggiunto " + warns + " warn points!");
             }
             mutePlayer(player, punishment.getDuration());
         } else if (punishment.getType() == PunishmentType.KICK) {
@@ -84,13 +84,11 @@ public class WarnController {
     }
 
     public void saveWarns() {
-        Bukkit.getScheduler().runTaskAsynchronously(FWChatControl.getINSTANCE(), () -> {
-            try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(warnsFile, false))) {
-                objectOutputStream.writeObject(playerWarnsCount);
-            } catch (IOException e) {
-                Bukkit.getLogger().log(Level.SEVERE, "Error while saving warns to warns.dat file");
-            }
-        });
+        try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(warnsFile, false))) {
+            objectOutputStream.writeObject(playerWarnsCount);
+        } catch (IOException e) {
+            Bukkit.getLogger().log(Level.SEVERE, "Error while saving warns to warns.dat file");
+        }
     }
 
     public void loadWarns() {
