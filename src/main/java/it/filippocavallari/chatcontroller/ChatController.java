@@ -1,12 +1,12 @@
-package it.forgottenworld.fwchatcontrol;
+package it.filippocavallari.chatcontroller;
 
 import com.earth2me.essentials.Essentials;
-import it.forgottenworld.fwchatcontrol.command.AdminCommand;
-import it.forgottenworld.fwchatcontrol.config.Config;
-import it.forgottenworld.fwchatcontrol.listener.ChatListener;
-import it.forgottenworld.fwchatcontrol.punishment.Punishment;
-import it.forgottenworld.fwchatcontrol.punishment.PunishmentType;
-import it.forgottenworld.fwchatcontrol.task.ReduceWarnTask;
+import it.filippocavallari.chatcontroller.task.ReduceWarnTask;
+import it.filippocavallari.chatcontroller.command.AdminCommand;
+import it.filippocavallari.chatcontroller.config.Config;
+import it.filippocavallari.chatcontroller.listener.ChatListener;
+import it.filippocavallari.chatcontroller.punishment.Punishment;
+import it.filippocavallari.chatcontroller.punishment.PunishmentType;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -15,9 +15,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.logging.Level;
 import java.util.regex.Pattern;
 
-public final class FWChatControl extends JavaPlugin {
+public final class ChatController extends JavaPlugin {
 
-    private static FWChatControl INSTANCE;
+    private static ChatController INSTANCE;
 
     private final Settings settings = new Settings();
     private WarnController warnController;
@@ -38,7 +38,7 @@ public final class FWChatControl extends JavaPlugin {
         warnController.saveWarns();
     }
 
-    public static FWChatControl getINSTANCE() {
+    public static ChatController getINSTANCE() {
         return INSTANCE;
     }
 
@@ -60,7 +60,7 @@ public final class FWChatControl extends JavaPlugin {
             loadData(config);
             hookEssentials();
         } catch (Exception e) {
-            Bukkit.getLogger().log(Level.SEVERE, "Error loading or creating the plugin config. Disabling " + getName() + ".");
+            Bukkit.getLogger().log(Level.SEVERE, "Error while loading or creating the plugin config. Disabling " + getName() + ".");
             getServer().getPluginManager().disablePlugin(this);
             e.printStackTrace();
         }
@@ -104,7 +104,7 @@ public final class FWChatControl extends JavaPlugin {
     }
 
     private void registerCommands(){
-        getCommand("fwcc").setExecutor(new AdminCommand(this));
+        getCommand("cc").setExecutor(new AdminCommand(this));
     }
 
     private void registerListeners() {
@@ -120,7 +120,7 @@ public final class FWChatControl extends JavaPlugin {
             essentials = getPlugin(Essentials.class);
             getLogger().log(Level.INFO, "Hooked into Essentials");
         } catch (Exception e) {
-            getLogger().log(Level.SEVERE, "Error while hooking into Essentials. Disabling FWChatControl...");
+            getLogger().log(Level.SEVERE, "Error while hooking into Essentials. Disabling ChatController...");
             getPluginLoader().disablePlugin(this);
         }
     }

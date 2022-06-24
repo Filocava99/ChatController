@@ -1,8 +1,8 @@
-package it.forgottenworld.fwchatcontrol.listener;
+package it.filippocavallari.chatcontroller.listener;
 
-import it.forgottenworld.fwchatcontrol.FWChatControl;
-import it.forgottenworld.fwchatcontrol.Settings;
-import it.forgottenworld.fwchatcontrol.WarnController;
+import it.filippocavallari.chatcontroller.ChatController;
+import it.filippocavallari.chatcontroller.Settings;
+import it.filippocavallari.chatcontroller.WarnController;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
@@ -24,7 +24,7 @@ public class ChatListener implements Listener {
     private final Map<UUID, Integer> playerMessagesCount = new HashMap<>();
     private int seconds = 0;
 
-    public ChatListener(FWChatControl chatControl) {
+    public ChatListener(ChatController chatControl) {
         this.settings = chatControl.getSettings();
         this.warnController = chatControl.getWarnController();
     }
@@ -40,13 +40,13 @@ public class ChatListener implements Listener {
         if (event.isCancelled()) return;
         String message = event.getMessage();
         if (settings.isWarnIfUsingBannedWords() && containsBannedWords(message)) {
-            Bukkit.getScheduler().runTask(FWChatControl.getINSTANCE(),()->{
+            Bukkit.getScheduler().runTask(ChatController.getINSTANCE(),()->{
                 warnController.warnPlayer(player);
             });
         }
         if(checkIfViolatingCapsRules(message)){
             if(settings.isWarnIfUsingCaps()){
-                Bukkit.getScheduler().runTask(FWChatControl.getINSTANCE(),()->{
+                Bukkit.getScheduler().runTask(ChatController.getINSTANCE(),()->{
                     warnController.warnPlayer(player);
                 });
             }

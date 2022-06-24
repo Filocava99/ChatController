@@ -1,7 +1,7 @@
-package it.forgottenworld.fwchatcontrol;
+package it.filippocavallari.chatcontroller;
 
-import it.forgottenworld.fwchatcontrol.punishment.Punishment;
-import it.forgottenworld.fwchatcontrol.punishment.PunishmentType;
+import it.filippocavallari.chatcontroller.punishment.Punishment;
+import it.filippocavallari.chatcontroller.punishment.PunishmentType;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
@@ -20,7 +20,7 @@ public class WarnController {
 
     private Map<UUID, Integer> playerWarnsCount;
 
-    public WarnController(FWChatControl chatControl) {
+    public WarnController(ChatController chatControl) {
         this.settings = chatControl.getSettings();
         this.warnsFile = new File(chatControl.getDataFolder(), "warns.dat");
         loadWarns();

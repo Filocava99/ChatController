@@ -1,4 +1,4 @@
-package it.forgottenworld.fwchatcontrol.punishment;
+package it.filippocavallari.chatcontroller.punishment;
 
 public class Punishment {
 

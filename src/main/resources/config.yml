@@ -1,6 +1,6 @@
 ############################
 #                          #
-#      FWChatControl       #
+#      ChatController       #
 #      by Tigierrei        #
 #                          #
 ############################
@@ -20,7 +20,7 @@ capitalizeFirstLetter: false
 #After how many seconds the plugin should reduce by one the warn points of a player
 reduceWarnPeriod: 86400
 bannedWords:
-  - "[s][t][r][o][n][z][o]"
+  - "[f][u][c][k]"
 #Avabilable punishments types: KICK, MUTE, BAN
 #The duration is expressed in seconds (NOT milliseconds). Example: 1 hour = 3600 seconds
 punishments:

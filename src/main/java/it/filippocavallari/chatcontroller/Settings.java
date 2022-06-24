@@ -1,6 +1,6 @@
-package it.forgottenworld.fwchatcontrol;
+package it.filippocavallari.chatcontroller;
 
-import it.forgottenworld.fwchatcontrol.punishment.Punishment;
+import it.filippocavallari.chatcontroller.punishment.Punishment;
 
 import java.util.*;
 import java.util.regex.Pattern;

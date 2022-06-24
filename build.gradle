@@ -1,37 +1,19 @@
-import org.apache.tools.ant.filters.ReplaceTokens
-
 apply plugin: 'java'
 
-group = 'it.forgottenworld'
-version = '0.6.4'
+group = 'it.filippocavallari'
+version = '1.0.0'
 
-sourceCompatibility = '1.8'
-targetCompatibility = '1.8'
+sourceCompatibility = '1.17'
+targetCompatibility = '1.17'
 
 repositories {
     mavenCentral()
-    maven {
-        name = 'papermc-repo'
-        url = 'https://papermc.io/repo/repository/maven-public/'
-    }
     maven { url 'https://jitpack.io' }
-    maven {
-        name = 'sonatype'
-        url = 'https://oss.sonatype.org/content/groups/public/'
-    }
-    maven {
-        url "https://ci.ender.zone/plugin/repository/everything/"
-    }
+    maven{url("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")}
+    maven { url "https://repo.essentialsx.net/releases/" }
 }
 
 dependencies {
-    compileOnly 'com.destroystokyo.paper:paper-api:1.16.3-R0.1-SNAPSHOT'
-    implementation 'com.github.TownyAdvanced:TownyChat:0.82'
-    compileOnly 'net.ess3:EssentialsX:2.16.1'
-}
-
-processResources {
-    from(sourceSets.main.resources.srcDirs) {
-        filter ReplaceTokens, tokens: [version: version]
-    }
+    implementation 'org.spigotmc:spigot-api:1.19-R0.1-SNAPSHOT'
+    compileOnly 'net.essentialsx:EssentialsX:2.19.4'
 }

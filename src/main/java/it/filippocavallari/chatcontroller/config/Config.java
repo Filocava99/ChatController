@@ -1,11 +1,10 @@
-package it.forgottenworld.fwchatcontrol.config;
+package it.filippocavallari.chatcontroller.config;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,7 +24,7 @@ public class Config {
      * @param configName Name of the config file
      * @param plugin     Instance of the plugin
      */
-    public Config(@NotNull String configName, @NotNull JavaPlugin plugin) throws IOException {
+    public Config(String configName, JavaPlugin plugin) throws IOException {
         this(new File(plugin.getDataFolder(), configName), plugin);
     }
 
@@ -34,7 +33,7 @@ public class Config {
      *
      * @param configFile The file you want to load
      */
-    public Config(@NotNull File configFile, @NotNull JavaPlugin plugin) throws IOException {
+    public Config(File configFile, JavaPlugin plugin) throws IOException {
         this.configFile = configFile;
         this.plugin = plugin;
         if(!exists()){

@@ -1,8 +1,8 @@
-package it.forgottenworld.fwchatcontrol.command;
+package it.filippocavallari.chatcontroller.command;
 
-import it.forgottenworld.fwchatcontrol.FWChatControl;
-import it.forgottenworld.fwchatcontrol.punishment.Punishment;
-import it.forgottenworld.fwchatcontrol.punishment.PunishmentType;
+import it.filippocavallari.chatcontroller.ChatController;
+import it.filippocavallari.chatcontroller.punishment.Punishment;
+import it.filippocavallari.chatcontroller.punishment.PunishmentType;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -12,7 +12,6 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
@@ -21,15 +20,15 @@ import java.util.stream.Collectors;
 
 public class AdminCommand implements CommandExecutor {
 
-    private FWChatControl plugin;
+    private ChatController plugin;
     private final int elementsPerPage = 5;
 
-    public AdminCommand(FWChatControl plugin) {
+    public AdminCommand(ChatController plugin) {
         this.plugin = plugin;
     }
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (args.length == 0) {
             printHelp(sender, args);
         } else if (args[0].equalsIgnoreCase("word")) {
@@ -127,33 +126,33 @@ public class AdminCommand implements CommandExecutor {
                 index = 1;
             }
         }
-        sender.sendMessage(ChatColor.GREEN + "------{ " + ChatColor.GOLD + "FWChatControl" + ChatColor.GREEN + " }------");
+        sender.sendMessage(ChatColor.GREEN + "------{ " + ChatColor.GOLD + "ChatController" + ChatColor.GREEN + " }------");
         switch (index) {
             case 1: {
-                sender.sendMessage(ChatColor.GREEN + "/fwcc help [page]");
-                sender.sendMessage(ChatColor.GREEN + "/fwcc reload");
-                sender.sendMessage(ChatColor.GREEN + "/fwcc warn <player>");
-                sender.sendMessage(ChatColor.GREEN + "/fwcc warnAll");
-                sender.sendMessage(ChatColor.GREEN + "/fwcc reduce <player>");
-                sender.sendMessage(ChatColor.GREEN + "/fwcc reduceAll");
-                sender.sendMessage(ChatColor.GREEN + "/fwcc reset <player>");
-                sender.sendMessage(ChatColor.GREEN + "/fwcc resetAll");
-                sender.sendMessage(ChatColor.GREEN + "/fwcc setCaps <percentage>");
-                sender.sendMessage(ChatColor.GREEN + "/fwcc ranking");
-                sender.sendMessage(ChatColor.GREEN + "/fwcc info <player>");
+                sender.sendMessage(ChatColor.GREEN + "/cc help [page]");
+                sender.sendMessage(ChatColor.GREEN + "/cc reload");
+                sender.sendMessage(ChatColor.GREEN + "/cc warn <player>");
+                sender.sendMessage(ChatColor.GREEN + "/cc warnAll");
+                sender.sendMessage(ChatColor.GREEN + "/cc reduce <player>");
+                sender.sendMessage(ChatColor.GREEN + "/cc reduceAll");
+                sender.sendMessage(ChatColor.GREEN + "/cc reset <player>");
+                sender.sendMessage(ChatColor.GREEN + "/cc resetAll");
+                sender.sendMessage(ChatColor.GREEN + "/cc setCaps <percentage>");
+                sender.sendMessage(ChatColor.GREEN + "/cc ranking");
+                sender.sendMessage(ChatColor.GREEN + "/cc info <player>");
                 break;
             }
             case 2: {
-                sender.sendMessage(ChatColor.GREEN + "/fwcc capitalize");
-                sender.sendMessage(ChatColor.GREEN + "/fwcc capsWarn");
-                sender.sendMessage(ChatColor.GREEN + "/fwcc floodWarn");
-                sender.sendMessage(ChatColor.GREEN + "/fwcc bannedWordsWarn");
-                sender.sendMessage(ChatColor.GREEN + "/fwcc punish <player> <warnLevel>");
-                sender.sendMessage(ChatColor.GREEN + "/fwcc word ban <word>");
-                sender.sendMessage(ChatColor.GREEN + "/fwcc word list <page>");
-                sender.sendMessage(ChatColor.GREEN + "/fwcc word unban <word>");
-                sender.sendMessage(ChatColor.GREEN + "/fwcc add <warns> <type> <duration> " + ChatColor.GRAY + "Adds a new punishments for specified warns");
-                sender.sendMessage(ChatColor.GREEN + "/fwcc remove <warns> " + ChatColor.GRAY + "Removes the punishments for specified warns");
+                sender.sendMessage(ChatColor.GREEN + "/cc capitalize");
+                sender.sendMessage(ChatColor.GREEN + "/cc capsWarn");
+                sender.sendMessage(ChatColor.GREEN + "/cc floodWarn");
+                sender.sendMessage(ChatColor.GREEN + "/cc bannedWordsWarn");
+                sender.sendMessage(ChatColor.GREEN + "/cc punish <player> <warnLevel>");
+                sender.sendMessage(ChatColor.GREEN + "/cc word ban <word>");
+                sender.sendMessage(ChatColor.GREEN + "/cc word list <page>");
+                sender.sendMessage(ChatColor.GREEN + "/cc word unban <word>");
+                sender.sendMessage(ChatColor.GREEN + "/cc add <warns> <type> <duration> " + ChatColor.GRAY + "Adds a new punishments for specified warns");
+                sender.sendMessage(ChatColor.GREEN + "/cc remove <warns> " + ChatColor.GRAY + "Removes the punishments for specified warns");
                 break;
             }
             default:
@@ -178,7 +177,7 @@ public class AdminCommand implements CommandExecutor {
 
     private void addPunishment(CommandSender sender, String[] args) {
         if (args.length < 4) {
-            sender.sendMessage(ChatColor.RED + "Missing parameters. Use /fwcc help for more information");
+            sender.sendMessage(ChatColor.RED + "Missing parameters. Use /cc help for more information");
         } else {
             try {
                 Punishment punishment = new Punishment(PunishmentType.valueOf(args[2]), Integer.parseInt(args[3]));
@@ -207,7 +206,7 @@ public class AdminCommand implements CommandExecutor {
 
     private void banWord(CommandSender sender, String[] args) {
         if (args.length < 3) {
-            sender.sendMessage(ChatColor.RED + "Missing parameters. Use /fwcc help for more information");
+            sender.sendMessage(ChatColor.RED + "Missing parameters. Use /cc help for more information");
         } else {
             StringBuilder stringBuilder = new StringBuilder();
             String wordToBan = String.join(" ", Arrays.copyOfRange(args, 2, args.length));
@@ -309,8 +308,8 @@ public class AdminCommand implements CommandExecutor {
     private void list(CommandSender sender, String[] args) {
         int currentPage = args.length < 3 ? 1 : Integer.parseInt(args[2]);
         ComponentBuilder componentBuilder = new ComponentBuilder(ChatColor.GREEN + "-------------- Banned words --------------\n");
-        TextComponent nextPageComponent = getArrow(">>", "/fwcc word list " + (currentPage + 1));
-        TextComponent previousPageComponent = getArrow("<<", "/fwcc word list " + (currentPage - 1));
+        TextComponent nextPageComponent = getArrow(">>", "/cc word list " + (currentPage + 1));
+        TextComponent previousPageComponent = getArrow("<<", "/cc word list " + (currentPage - 1));
         List<String> bannedWords = plugin.getSettings().getRegexes().stream().map(Pattern::pattern).collect(Collectors.toList());
         int beginIndex = getPageBeginIndex(currentPage);
         if (beginIndex >= bannedWords.size()) {
@@ -323,7 +322,7 @@ public class AdminCommand implements CommandExecutor {
         }
         for (int i = beginIndex; i <= endIndex; i++) {
             TextComponent textComponent = new TextComponent(ChatColor.GRAY + "[" + ChatColor.GOLD + "Unban" + ChatColor.GRAY + "]");
-            textComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/fwcc word unban " + bannedWords.get(i)));
+            textComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/cc word unban " + bannedWords.get(i)));
             textComponent.setBold(true);
             componentBuilder.append(ChatColor.YELLOW + bannedWords.get(i)).append("    ").append(textComponent).append("\n");
         }
@@ -337,7 +336,7 @@ public class AdminCommand implements CommandExecutor {
 
     private void unbanWord(CommandSender sender, String[] args) {
         if (args.length < 3) {
-            sender.sendMessage(ChatColor.RED + "Missing parameters. Use /fwcc help for more information");
+            sender.sendMessage(ChatColor.RED + "Missing parameters. Use /cc help for more information");
         } else {
             plugin.getSettings().getRegexes().removeIf(pattern -> pattern.pattern().equalsIgnoreCase(args[2]));
             sender.sendMessage(ChatColor.GREEN + "Regex " + ChatColor.DARK_GREEN + args[2] + ChatColor.GREEN + " deleted.");

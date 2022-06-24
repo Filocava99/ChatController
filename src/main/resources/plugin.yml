@@ -1,14 +1,13 @@
-name: FWChatControl
-version: @version@
-main: it.forgottenworld.fwchatcontrol.FWChatControl
+name: ChatController
+version: 1.0.0
+main: it.filippocavallari.chatcontroller.ChatController
 api-version: 1.16
 depend:
-  - TownyChat
   - Essentials
+softdepend:
+  - TownyChat
 commands:
-  fwcc:
+  cc:
     aliases:
-      - fwchatcontrol
-      - chatcontrol
-      - cc
-    description: Admin command of FWChatControl
+      - chatcontroller
+    description: Root command of ChatController
