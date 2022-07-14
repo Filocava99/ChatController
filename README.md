@@ -1,3 +1,4 @@
+[![Build status badge](https://raw.githubusercontent.com/Filocava99/Buildy/master/builds/ChatController/ChatController-build.svg)](https://filocava99.github.io/Buildy/builds/ChatController/ChatController.html)
 # ChatController
 Lightweight chat control plugin fot Spigot servers.
 
